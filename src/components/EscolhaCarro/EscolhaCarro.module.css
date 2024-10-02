@@ -1,0 +1,86 @@
+.selecao-carro {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.selecao-carro__titulo {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.selecao-carro__lista {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.selecao-carro__item {
+    margin: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.selecao-carro__imagem {
+    max-width: 100%;
+    height: auto;
+    cursor: pointer;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+    .selecao-carro__info {
+        text-align: center;
+        font-size: 1rem;
+    }
+
+    .selecao-carro__item {
+        margin: 20px;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .selecao-carro__imagem {
+        max-width: 100%;
+    }
+}
+
+@media (min-width: 992px) and (max-width: 1199px) {
+    .selecao-carro__info {
+        text-align: center;
+        font-size: 1.1rem;
+    }
+
+    .selecao-carro__item {
+        margin: 20px;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .selecao-carro__imagem {
+        max-width: 100%;
+    }
+}
+
+@media (min-width: 1200px) {
+    .selecao-carro{
+        margin-top: 79px;
+        margin-bottom: 79px;
+    }
+
+    .selecao-carro__info {
+        text-align: center;
+        font-size: 1.2rem;
+    }
+
+    .selecao-carro__item {
+        margin: 20px;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .selecao-carro__imagem {
+        max-width: 100%;
+    }
+}
