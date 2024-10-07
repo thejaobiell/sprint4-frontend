@@ -1,0 +1,143 @@
+.main .header{
+    margin: 0;
+    font-family: Arial, Helvetica, Roboto;
+    padding: 0;
+}
+
+.header ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.header nav ul {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: auto;
+    margin-top: 10px;
+}
+
+.header nav ul li {
+    margin: 0 15px;
+}
+
+.header nav a {
+    text-decoration: none;
+    color: black;
+    font-size: 18px;
+}
+
+.header nav a:hover {
+    text-decoration: underline;
+}
+
+.header .black {
+    color: black;
+}
+
+.header .blue {
+    color: dodgerblue;
+}
+
+@media (max-width: 767px) {
+    .header {
+        width: 100%;
+        height: auto;
+        background-color: #D9D9D9;
+        text-align: center;
+        font-size: 20px;
+        padding: 12px 0;
+        position: relative;
+    }
+
+    #logo {
+        width: 100px;
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        cursor: pointer;
+    }
+
+    #Diagnoscar {
+        padding: 10px;
+        margin-top: 60px;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+    .header {
+        width: 100%;
+        height: auto;
+        background-color: #D9D9D9;
+        text-align: center;
+        font-size: 26px;
+        position: relative;
+    }
+
+    #logo {
+        width: 150px;
+        position: absolute;
+        top: 20px;
+        left: 30px;
+        cursor: pointer;
+    }
+
+    #Diagnoscar {
+        padding: 16px;
+        margin-top: 80px;
+        font-size: 70px;
+    }
+}
+
+@media (min-width: 992px) and (max-width: 1199px) {
+    .header {
+        width: 100%;
+        height: auto;
+        background-color: #D9D9D9;
+        text-align: center;
+        font-size: 20px;
+        padding: 10px 0;
+        position: relative;
+        }
+
+    #logo {
+        width: 80px;
+        position: absolute;
+        top: 20px;
+        left: 15px;
+        cursor: pointer;
+    }
+
+    #Diagnoscar {
+        padding: 10px;
+        margin-top: 60px;
+    }
+}
+
+@media (min-width: 1200px) {
+    .header {
+        width: 100%;
+        height: fit-content;
+        background-color: #D9D9D9;
+        text-align: center;
+        font-size: 20px;
+        padding: 10px 0;
+        position: relative;
+    }
+
+    #logo {
+        width: 80px;
+        height: auto;
+        position: absolute;
+        top: 20px;
+        left: 15px;
+        cursor: pointer;
+    }
+
+    #Diagnoscar {
+        padding: 16px;
+        margin-top: 60px;
+        font-size: 70px;
+    }
+}
