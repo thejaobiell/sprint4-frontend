@@ -1,5 +1,5 @@
 'use client'
-import { useNavigate } from "react-router-dom";
+import { useRouter } from 'next/navigation';
 import styles from "./Cadastro.module.css"; 
 import { useEffect } from 'react';
 import InputMask from 'react-input-mask';
@@ -9,145 +9,174 @@ const Cadastro = () => {
         document.title = "Cadastro - Diagnoscar";
     }, []);
 
-    const navigate = useNavigate();
-    const logino = () => {
-        navigate('/login');
+    const router = useRouter();
+
+    const handleCadastro = (evento: React.FormEvent<HTMLFormElement>) => {
+        evento.preventDefault();
+        if (evento.currentTarget.checkValidity()) {
+            router.push('/Login');
+        } else {
+            evento.currentTarget.reportValidity();
+        }
     };
 
     return (
         <>
             <section className={styles.forms}>
-                <form>
-                    <label> Nome Completo: <br /> 
+                <form onSubmit={handleCadastro}>
+                    <label className={styles.label}> Nome Completo: <br /> 
                         <input 
                             type="text" 
-                            name="txtNome" 
-                            id="txtNome" 
-                            placeholder="Digite seu nome" 
+                            name="nomeCompleto" 
+                            id="nomeCompleto" 
+                            placeholder="Digite seu nome completo" 
+                            required  
                             className={styles.inputField}
                         /> 
                     </label>
 
-                    <label> Data de nascimento: <br /> 
+                    <label className={styles.label}> Data de Nascimento: <br /> 
                         <input 
                             type="date" 
-                            name="txtDataNascimento" 
-                            id="txtNASCIMENTO" 
+                            name="dataNascimento" 
+                            id="dataNascimento" 
                             min="1900-01-01" 
                             max="2006-12-31" 
+                            required  
                             className={styles.inputField}
                         /> 
                     </label>
 
-                    <label>Sexo:
+                    <label className={styles.label}>Sexo:
                         <label> 
                             <input 
                                 type="radio" 
-                                name="rdoSEXO" 
-                                id="rdoSEXOM" 
+                                name="sexo" 
+                                id="sexoM" 
                                 value="M" 
+                                required  
                                 className={styles.radioInput}
                             />{" "} Masculino 
                         </label>
-                        <label>
+
+                        <label className={styles.label}>
                             <input 
                                 type="radio" 
-                                name="rdoSEXO" 
-                                id="rdoSEXOF" 
+                                name="sexo" 
+                                id="sexoF" 
                                 value="F" 
                                 className={styles.radioInput}
                             />{" "} Feminino 
                         </label>
-                        <label> 
+
+                        <label className={styles.label}> 
                             <input 
                                 type="radio" 
-                                name="rdoSEXO" 
-                                id="rdoSEXO0" 
+                                name="sexo" 
+                                id="sexoOutro" 
                                 value="O" 
                                 className={styles.radioInput}
                             /> Outro 
                         </label>
                     </label> <br />
 
-                    <label>E-Mail: <br /> 
+                    <label className={styles.label}>E-mail: <br /> 
                         <input 
                             type="email" 
-                            name="txtEmail" 
-                            id="txtEMAIL" 
+                            name="email" 
+                            id="email" 
                             placeholder="Digite seu e-mail" 
+                            required  
                             className={styles.inputField}
                         /> 
                     </label>
 
-                    <label> CPF: <br />
+                    <label className={styles.label}> CPF: <br />
                         <InputMask
                             type="text" 
                             mask="999.999.999-99"
-                            id="txtCPF"
-                            name="txtcpf"
+                            id="cpf"
+                            name="cpf"
                             placeholder="Digite o CPF"
+                            required  
                             maxLength={15}
                             className={styles.inputField}
                         />
                     </label>
 
-                    <label> CNH: <br />
+                    <label className={styles.label}> CNH: <br />
                         <input
                             type="text" 
-                            id="txtCNH"
-                            name="txtcnh"
+                            id="cnh"
+                            name="cnh"
                             placeholder="Digite a CNH"
+                            required  
                             maxLength={11}
                             className={styles.inputField}
                         />
                     </label>
 
-                    <label>RG: <br /> 
+                    <label className={styles.label}>RG: <br /> 
                         <InputMask
                             mask="99.999.999-9"
                             type="text" 
-                            id="txtRG" 
-                            name="txtrg" 
+                            id="rg" 
+                            name="rg" 
                             placeholder="Digite o RG" 
+                            required  
                             className={styles.inputField}
                         /> 
                     </label>
 
-                    <label> Celular: <br />
+                    <label className={styles.label}> Celular: <br />
                         <InputMask
                             type="text" 
                             mask="(99) 99999-9999"
-                            id="txtCEL"
-                            name="txtCEL"
-                            placeholder="Digite o número de Celular"
+                            id="celular"
+                            name="celular"
+                            placeholder="Digite o número de celular"
+                            required  
                             className={styles.inputField}
                         />
                     </label>
 
-                    <label>Endereço: <br />
+                    <label className={styles.label}>Endereço: <br />
                         <textarea
-                            id="txtEndereco"
+                            id="endereco"
                             name="endereco"
                             placeholder="Rua, Número, Bairro, Cidade, Estado e CEP (Exemplo: Rua das Flores, 123, Bairro Jardim Primavera, São Paulo, São Paulo, 01000-000)"
+                            required  
                             rows={5}
                             className={styles.textArea}
                         />
                     </label> <br />
 
-                    <label>Digite as informações do carro (Use / para separa os automoveís) : <br /> 
+                    <label className={styles.label}> CEP: <br />
+                        <input
+                            type="text" 
+                            id="cep"
+                            name="cep"
+                            placeholder="Digite a CEP"
+                            required  
+                            maxLength={11}
+                            className={styles.inputField}
+                        />
+                    </label>
+
+                    <label className={styles.label}>Digite as informações do carro (Use / para separar os automóveis): <br /> 
                         <input 
                             type="text" 
-                            name="txtNome" 
-                            id="txtNome" 
+                            name="informacaoCarro" 
+                            id="informacaoCarro" 
                             placeholder="Placa, Marca, Modelo e Ano" 
+                            required  
                             className={styles.inputField}
                         /> 
                     </label>
 
                     <input 
-                        type="button" 
+                        type="submit" 
                         value="Cadastrar" 
-                        onClick={logino}
                         className={styles.botao}
                     />
                 </form>

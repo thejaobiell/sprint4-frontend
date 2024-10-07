@@ -1,4 +1,4 @@
-import Menu from './pages/Menu/Menu';
+import Menu from './Menu/page';
 
 export default function Home() {
   return (

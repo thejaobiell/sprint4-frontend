@@ -9,11 +9,7 @@
         margin-bottom: 5px;
     }
 
-    section input[type="text"],
-    section input[type="textarea"],
-    section input[type="email"],
-    section input[type="date"],
-    section textarea {
+    .inputField{
         width: 100%;
         padding: 10px;
         margin-bottom: 10px;
@@ -24,7 +20,7 @@
         box-sizing: border-box;
     }
 
-    label {
+    .label {
         font-weight: bold;
     }
 
@@ -58,11 +54,7 @@
         margin-bottom: 7px;
     }
 
-    section input[type="text"],
-    section input[type="textarea"],
-    section input[type="email"],
-    section input[type="date"],
-    section textarea {
+    .inputField{
         width: 100%;
         padding: 12px;
         margin-bottom: 12px;
@@ -73,7 +65,7 @@
         box-sizing: border-box;
     }
 
-    label {
+    .label {
         font-weight: bold;
     }
 
@@ -107,11 +99,7 @@
         margin-bottom: 5px;
     }
 
-    section input[type="text"],
-    section input[type="textarea"],
-    section input[type="email"],
-    section input[type="date"],
-    section textarea {
+    .inputField{
         width: 100%;
         padding: 8px;
         margin-bottom: 10px;
@@ -122,7 +110,7 @@
         box-sizing: border-box;
     }
 
-    label {
+    .label {
         font-weight: bold;
     }
 
@@ -156,12 +144,7 @@
         margin-bottom: 5px;
     }
 
-    section input[type="text"],
-    section input[type="textarea"],
-    section input[type="email"],
-    section input[type="date"],
-    section inputmask,
-    section textarea {
+    .inputField{
         width: 100%;
         padding: 8px;
         margin-bottom: 10px;
@@ -172,7 +155,7 @@
         box-sizing: border-box;
     }
 
-    label {
+    .label {
         font-weight: bold;
     }
 
