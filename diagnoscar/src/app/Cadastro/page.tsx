@@ -1,10 +1,14 @@
-'use client'
+'use client';
 import { useRouter } from 'next/navigation';
 import styles from "./Cadastro.module.css"; 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import InputMask from 'react-input-mask';
+import CarroForm from './CarroForm'; // Importar o componente
 
 const Cadastro = () => {
+    const [carros, setCarros] = useState([{ placa: '', marca: '', modelo: '', ano: '' }]);
+    const [showPassword, setShowPassword] = useState(false); // Estado para controlar visibilidade da senha
+
     useEffect(() => {
         document.title = "Cadastro - Diagnoscar";
     }, []);
@@ -20,159 +24,186 @@ const Cadastro = () => {
         }
     };
 
+    const adicionarCarro = () => {
+        setCarros((prevCarros) => [...prevCarros, { placa: '', marca: '', modelo: '', ano: '' }]);
+    };
+
+    const removerCarro = (index: number) => {
+        if (carros.length > 1) {
+            setCarros((prevCarros) => prevCarros.filter((_, i) => i !== index));
+        }
+    };
+
+    const handleInputChange = (index: number, e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+        setCarros((prevCarros) =>
+            prevCarros.map((carro, i) => i === index ? { ...carro, [name]: value } : carro)
+        );
+    };
+
+    const togglePasswordVisibility = () => {
+        setShowPassword(!showPassword); // Alterna entre mostrar e ocultar senha
+    };
+
     return (
         <>
             <section className={styles.forms}>
                 <form onSubmit={handleCadastro}>
-                    <label className={styles.label}> Nome Completo: <br /> 
-                        <input 
-                            type="text" 
-                            name="nomeCompleto" 
-                            id="nomeCompleto" 
-                            placeholder="Digite seu nome completo" 
-                            required  
-                            className={styles.inputField}
-                        /> 
-                    </label>
 
-                    <label className={styles.label}> Data de Nascimento: <br /> 
-                        <input 
-                            type="date" 
-                            name="dataNascimento" 
-                            id="dataNascimento" 
-                            min="1900-01-01" 
-                            max="2006-12-31" 
-                            required  
-                            className={styles.inputField}
-                        /> 
-                    </label>
+                    {/* Informações Pessoais */}
+                    <fieldset className={styles.fieldset}>
+                        <legend>Informações Pessoais</legend>
 
-                    <label className={styles.label}>Sexo:
-                        <label> 
+                        <label className={styles.label}> Nome Completo: <br /> 
                             <input 
-                                type="radio" 
-                                name="sexo" 
-                                id="sexoM" 
-                                value="M" 
+                                type="text" 
+                                name="nomeCompleto" 
+                                id="nomeCompleto" 
+                                placeholder="Digite seu nome completo" 
                                 required  
-                                className={styles.radioInput}
-                            />{" "} Masculino 
-                        </label>
+                                className={`${styles.inputField} ${styles.CampoLargo}`}
+                            /> 
+                        </label><br />
 
-                        <label className={styles.label}>
+                        <label className={styles.label}> Data de Nascimento: <br /> 
                             <input 
-                                type="radio" 
-                                name="sexo" 
-                                id="sexoF" 
-                                value="F" 
-                                className={styles.radioInput}
-                            />{" "} Feminino 
-                        </label>
+                                type="date" 
+                                name="dataNascimento" 
+                                id="dataNascimento" 
+                                min="1900-01-01" 
+                                max="2006-12-31" 
+                                required  
+                                className={styles.inputField}
+                            /> 
+                        </label><br />
 
-                        <label className={styles.label}> 
+                        <label className={styles.label}>Sexo:<br />
+                            <label> 
+                                <input 
+                                    type="radio" 
+                                    name="sexo" 
+                                    id="sexoM" 
+                                    value="M" 
+                                    required  
+                                    className={styles.radioInput}
+                                />{" "} Masculino 
+                            </label>
+
+                            <label className={styles.label}><br />
+                                <input 
+                                    type="radio" 
+                                    name="sexo" 
+                                    id="sexoF" 
+                                    value="F" 
+                                    className={styles.radioInput}
+                                />{" "} Feminino 
+                            </label>
+
+                            <label className={styles.label}> <br />
+                                <input 
+                                    type="radio" 
+                                    name="sexo" 
+                                    id="sexoOutro" 
+                                    value="O" 
+                                    className={styles.radioInput}
+                                /> Outro 
+                            </label>
+                        </label> <br /> <br />
+
+                        <label className={styles.label}>E-mail: <br /> 
                             <input 
-                                type="radio" 
-                                name="sexo" 
-                                id="sexoOutro" 
-                                value="O" 
-                                className={styles.radioInput}
-                            /> Outro 
+                                type="email" 
+                                name="email" 
+                                id="email" 
+                                placeholder="Digite seu e-mail" 
+                                required  
+                                className={styles.inputField}
+                            /> 
                         </label>
-                    </label> <br />
 
-                    <label className={styles.label}>E-mail: <br /> 
-                        <input 
-                            type="email" 
-                            name="email" 
-                            id="email" 
-                            placeholder="Digite seu e-mail" 
-                            required  
-                            className={styles.inputField}
-                        /> 
-                    </label>
+                        <label className={styles.label}>Senha: <br /> 
+                            <div className={styles.passwordWrapper}>
+                                <input 
+                                    type={showPassword ? 'text' : 'password'}
+                                    name="senha" 
+                                    id="senha" 
+                                    placeholder="Digite uma senha" 
+                                    required  
+                                    className={styles.inputField}
+                                />
+                                <button 
+                                    type="button" 
+                                    onClick={togglePasswordVisibility}
+                                    className={styles.toggleButton}
+                                >
+                                    {showPassword ? 'Ocultar' : 'Mostrar'}
+                                </button>
+                            </div>
+                        </label>
 
-                    <label className={styles.label}> CPF: <br />
-                        <InputMask
-                            type="text" 
-                            mask="999.999.999-99"
-                            id="cpf"
-                            name="cpf"
-                            placeholder="Digite o CPF"
-                            required  
-                            maxLength={15}
-                            className={styles.inputField}
-                        />
-                    </label>
 
-                    <label className={styles.label}> CNH: <br />
-                        <input
-                            type="text" 
-                            id="cnh"
-                            name="cnh"
-                            placeholder="Digite a CNH"
-                            required  
-                            maxLength={11}
-                            className={styles.inputField}
-                        />
-                    </label>
+                    </fieldset>
 
-                    <label className={styles.label}>RG: <br /> 
-                        <InputMask
-                            mask="99.999.999-9"
-                            type="text" 
-                            id="rg" 
-                            name="rg" 
-                            placeholder="Digite o RG" 
-                            required  
-                            className={styles.inputField}
-                        /> 
-                    </label>
+                    {/* Documentos */}
+                    <fieldset className={styles.fieldset}>
+                        <legend>Documentos</legend>
 
-                    <label className={styles.label}> Celular: <br />
-                        <InputMask
-                            type="text" 
-                            mask="(99) 99999-9999"
-                            id="celular"
-                            name="celular"
-                            placeholder="Digite o número de celular"
-                            required  
-                            className={styles.inputField}
-                        />
-                    </label>
+                        <label className={styles.label}> CPF: <br />
+                            <InputMask
+                                type="text" 
+                                mask="999.999.999-99"
+                                id="cpf"
+                                name="cpf"
+                                placeholder="Digite o CPF"
+                                required  
+                                className={styles.inputField}
+                            />
+                        </label>
 
-                    <label className={styles.label}>Endereço: <br />
-                        <textarea
-                            id="endereco"
-                            name="endereco"
-                            placeholder="Rua, Número, Bairro, Cidade, Estado e CEP (Exemplo: Rua das Flores, 123, Bairro Jardim Primavera, São Paulo, São Paulo, 01000-000)"
-                            required  
-                            rows={5}
-                            className={styles.textArea}
-                        />
-                    </label> <br />
+                        <label className={styles.label}> CNH: <br />
+                            <input
+                                type="text" 
+                                id="cnh"
+                                name="cnh"
+                                placeholder="Digite a CNH"
+                                required
+                                className={styles.inputField}
+                            />
+                        </label>
 
-                    <label className={styles.label}> CEP: <br />
-                        <input
-                            type="text" 
-                            id="cep"
-                            name="cep"
-                            placeholder="Digite a CEP"
-                            required  
-                            maxLength={11}
-                            className={styles.inputField}
-                        />
-                    </label>
+                        <label className={styles.label}>RG: <br /> 
+                            <InputMask
+                                mask="99.999.999-9"
+                                type="text" 
+                                id="rg" 
+                                name="rg" 
+                                placeholder="Digite o RG" 
+                                required  
+                                className={styles.inputField}
+                            /> 
+                        </label>
+                    </fieldset>
 
-                    <label className={styles.label}>Digite as informações do carro (Use / para separar os automóveis): <br /> 
-                        <input 
-                            type="text" 
-                            name="informacaoCarro" 
-                            id="informacaoCarro" 
-                            placeholder="Placa, Marca, Modelo e Ano" 
-                            required  
-                            className={styles.inputField}
-                        /> 
-                    </label>
+                    {/* Informações do Carro */}
+                    {carros.map((carro, index) => (
+                        <fieldset className={styles.fieldset} key={index}>
+                            <CarroForm
+                                index={index}
+                                carro={carro}
+                                handleInputChange={handleInputChange}
+                                removerCarro={removerCarro}  // Passando a função de remover como prop
+                                carros={carros}  // Passando todos os carros para controle
+                            />
+                        </fieldset>
+                    ))}
+
+                    <button 
+                        type="button" 
+                        onClick={adicionarCarro}
+                        className={styles.botaoAdicionar}
+                    >
+                        Adicionar Carro
+                    </button>
 
                     <input 
                         type="submit" 

@@ -1,0 +1,98 @@
+.containera {
+    text-align: center;
+    padding: 20px;
+}
+
+.workshops {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    margin: 10px 0;
+    font-size: 18px;
+}
+
+input[type="radio"] {
+    margin-right: 10px;
+}
+
+.botao {
+    height: 70px;
+    border-radius: 30px;
+    border: 3px solid #B6B6B6;
+    background: #009FE3;
+    color: #fff;
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.botao:hover {
+    background: #0077B6;
+}
+
+@media (max-width: 767px) {
+    .containera {
+        margin-top: 245px;
+        margin-bottom: 245px;
+    }
+    h1 {
+        font-size: 24px;
+    }
+    label {
+        font-size: 16px;
+    }
+    button {
+        font-size: 14px;
+        padding: 8px 16px;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+    .containera {
+        margin-top: 185px;
+        margin-bottom: 185px;
+    }
+    h1 {
+        font-size: 28px;
+    }
+    label {
+        font-size: 18px;
+    }
+    button {
+        font-size: 16px;
+    }
+}
+
+@media (min-width: 992px) and (max-width: 1199px) {
+    .containera {
+        margin-top: 223px;
+        margin-bottom: 223px;
+    }
+    h1 {
+        font-size: 32px;
+    }
+    label {
+        font-size: 20px;
+    }
+    button {
+        font-size: 18px;
+    }
+}
+
+@media (min-width: 1200px) {
+    .containera {
+        margin-top: 185px;
+        margin-bottom: 185px;
+    }
+    h1 {
+        font-size: 36px;
+    }
+    label {
+        font-size: 22px;
+    }
+    button {
+        font-size: 20px;
+    }
+}
