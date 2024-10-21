@@ -2,15 +2,8 @@
     border: 2px solid #ccc;
     border-radius: 5px;
     padding: 20px;
-    margin: 10px 0;
     background-color: #f9f9f9;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-.container {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
 }
 
 .section {
@@ -20,15 +13,12 @@
     text-align: center;
     height: 300px;
     position: relative;
-    margin-top: 210px;
-    margin-bottom: 210px;
 }
 
 .section input[type="text"],
+.section input[type="password"],
 .section input[type="email"] {
     width: 100%;
-    padding: 10px;
-    margin-bottom: 10px;
     border: 2px solid #CCCCCC;
     border-radius: 5px;
     background-color: #F0F0F0;
@@ -36,14 +26,10 @@
     box-sizing: border-box;
 }
 
-.section h4 {
-    font-size: 18px;
-}
-
 .button {
     width: 100px;
     height: 50px;
-    font-size: 16px;
+    font-size: 15px;
     border-radius: 25px;
     border: 3px solid #B6B6B6;
     background: #009FE3;
@@ -59,17 +45,34 @@
     background: #0077B6;
 }
 
-.error {
-    color: red;
+.passwordContainer {
+    position: relative;
+    width: 100%;
+    margin-bottom: 20px;
 }
 
-.buttons-container {
-    margin-top: 20px;
+.passwordContainer .input {
+    padding-right: 40px;
 }
 
-@media (min-width: 768px) and (max-width: 991px) {
+.toggleButton {
+    position: absolute;
+    right: 10px;
+    top: 30px;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.toggleButton:focus {
+    outline: none;
+}
+@media(max-width: 767px) {
     .section {
         height: 400px;
+        margin: 98px 0px 98px;
     }
 
     .section form {
@@ -78,14 +81,38 @@
     }
 
     .section input[type="text"],
+    .section input[type="password"],
     .section input[type="email"] {
         padding: 15px;
         margin-bottom: 15px;
         font-size: 18px;
     }
 
-    .section h4 {
-        font-size: 30px;
+    .button {
+        width: 120px;
+        height: 55px;
+        font-size: 18px;
+        border-radius: 27px;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+    .section {
+        height: 400px;
+        margin: 80px 0px 80px;
+    }
+
+    .section form {
+        width: 80%;
+        max-width: 300px;
+    }
+
+    .section input[type="text"],
+    .section input[type="password"],
+    .section input[type="email"] {
+        padding: 15px;
+        margin-bottom: 15px;
+        font-size: 18px;
     }
 
     .button {
@@ -99,22 +126,20 @@
 @media (min-width: 992px) and (max-width: 1199px) {
     .section {
         height: 450px;
+        margin: 61px 0px 61px;
     }
 
     .section form {
-        width: 80%;
+        width: 100%;
         max-width: 350px;
     }
 
     .section input[type="text"],
+    .section input[type="password"],
     .section input[type="email"] {
         padding: 18px;
         margin-bottom: 20px;
         font-size: 20px;
-    }
-
-    .section h4 {
-        font-size: 34px;
     }
 
     .button {
@@ -127,7 +152,7 @@
 
 @media (min-width: 1200px) {
     .section {
-        height: 600px;
+        height: 565px;
     }
 
     .section form {
@@ -136,14 +161,11 @@
     }
 
     .section input[type="text"],
+    .section input[type="password"],
     .section input[type="email"] {
         padding: 24px;
         margin-bottom: 30px;
         font-size: 26px;
-    }
-
-    .section h4 {
-        font-size: 52px;
     }
 
     .button {
