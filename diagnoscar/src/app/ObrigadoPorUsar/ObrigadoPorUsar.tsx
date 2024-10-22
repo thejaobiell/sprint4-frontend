@@ -6,9 +6,13 @@ import { useEffect } from 'react';
 const ObrigadoPorUsar = () => {
 
     useEffect(() => {
-    document.title = "Obrigado por usar a Diagnoscar";
-  }, []);
-  
+        document.title = "Obrigado por usar a Diagnoscar!";
+        const link = document.createElement('link');
+        link.rel = 'icon';
+        link.href = '/img/portoLogo/iconPorto.ico';
+        document.head.appendChild(link);
+    }, []);
+
     const navigate = useNavigate();
 
     const voltarMenu = () => {
