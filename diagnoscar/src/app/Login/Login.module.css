@@ -69,6 +69,7 @@
 .toggleButton:focus {
     outline: none;
 }
+
 @media(max-width: 767px) {
     .section {
         height: 400px;

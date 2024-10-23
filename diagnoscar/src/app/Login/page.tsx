@@ -20,7 +20,7 @@ const Login = () => {
             const analiseUser = JSON.parse(user);
 
             if (analiseUser.email === email && analiseUser.senha === senha) {
-                router.push('/EscolhaCarro');
+                router.push('/Dashboard');
             } else {
                 setError('Email ou senha incorretos');
             }
