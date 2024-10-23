@@ -4,8 +4,13 @@ import styles from "./Membros.module.css";
 
 const Membros = () => {
     useEffect(() => {
-        document.title = "Página de Membros - Diagnoscar";
+        document.title = "Membros - DiagnosCAR";
+        const link = document.createElement('link');
+        link.rel = 'icon';
+        link.href = '/img/Logos/Diagnoscar.ico';
+        document.head.appendChild(link);
     }, []);
+
 
     return (
         <section className={styles.membrosContainer}>

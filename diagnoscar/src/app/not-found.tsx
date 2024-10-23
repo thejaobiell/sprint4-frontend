@@ -5,10 +5,10 @@ import Link from 'next/link';
 
 const Error404 = () => {
     useEffect(() => {
-        document.title = "Erro 404 - Página Não Encontrada";
+        document.title = "Erro 404 - DiagnosCAR";
         const link = document.createElement('link');
         link.rel = 'icon';
-        link.href = '/img/portoLogo/iconPorto.ico';
+        link.href = '/img/Logos/Diagnoscar.ico';
         document.head.appendChild(link);
     }, []);
 

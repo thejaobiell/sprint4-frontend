@@ -18,8 +18,13 @@ const defaultIcon = L.icon({
 const GeolocationApp: React.FC = () => {
 
     useEffect(() => {
-    document.title = "Chamando o Guincho - Diagnoscar";
-  }, []);
+        document.title = "Chamando Guincho - DiagnosCAR";
+        const link = document.createElement('link');
+        link.rel = 'icon';
+        link.href = '/img/Logos/Diagnoscar.ico';
+        document.head.appendChild(link);
+    }, []);
+
 
 
   const [location, setLocation] = useState<{ latitude: number | null; longitude: number | null }>({

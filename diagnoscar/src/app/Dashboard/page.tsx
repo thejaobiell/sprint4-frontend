@@ -44,10 +44,10 @@ const Dashboard = () => {
   const router = useRouter();
 
   useEffect(() => {
-    document.title = "Escolha o Carro Defeituoso - Diagnoscar";
+    document.title = "Escolha o Carro Defeituoso - DiagnosCAR";
     const link = document.createElement('link');
     link.rel = 'icon';
-    link.href = '/img/portoLogo/iconPorto.ico';
+    link.href = '/img/Logos/Diagnoscar.ico';
     document.head.appendChild(link);
 
     const dataUserArmazenados = localStorage.getItem('user');

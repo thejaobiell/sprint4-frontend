@@ -14,9 +14,14 @@ const Oficinas = () => {
     navigate('/relatoriodiagnoscar');
   };
 
-  useEffect(() => {
-    document.title = "Oficinas Perto";
-  }, []);
+    useEffect(() => {
+        document.title = "Oficinas por PERTO - DiagnosCAR";
+        const link = document.createElement('link');
+        link.rel = 'icon';
+        link.href = '/img/Logos/Diagnoscar.ico';
+        document.head.appendChild(link);
+    }, []);
+
 
   const [oficinaSelecionada, setOficinaSelecionada] = useState<string | null>(null);
 

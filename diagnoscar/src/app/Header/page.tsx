@@ -7,11 +7,11 @@ const Header = () => {
 
             <header className={styles.header}>
                 <Link href="/">
-                    <img id="logo" src="/img/portoLogo/Porto Seguro1.png" alt="Logo Porto" />
+                    <img id="logo" src="/img/Logos/TESTE.png" alt="Logo DiagnoCAR" />
                 </Link>
 
-                <h1 id="Diagnoscar">
-                    <span className={styles.black}>Diagnos</span> <span className={styles.blue}>Car</span>
+                <h1>
+                    <span className={styles.lefti}>Diagnos</span><span className={styles.righti}>CAR</span>
                 </h1>
 
                 <nav>

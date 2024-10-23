@@ -6,10 +6,10 @@ import { useEffect } from 'react';
 const ObrigadoPorUsar = () => {
 
     useEffect(() => {
-        document.title = "Obrigado por usar a Diagnoscar!";
+        document.title = "Obrigado por usar a DiagnosCAR!";
         const link = document.createElement('link');
         link.rel = 'icon';
-        link.href = '/img/portoLogo/iconPorto.ico';
+        link.href = '/img/Logos/Diagnoscar.ico';
         document.head.appendChild(link);
     }, []);
 

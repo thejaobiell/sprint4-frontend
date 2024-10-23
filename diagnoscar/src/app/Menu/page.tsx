@@ -6,10 +6,10 @@ import Link from 'next/link';
 
 const Menu = () => {
     useEffect(() => {
-        document.title = "Menu - Diagnoscar";
+        document.title = "Menu - DiagnosCAR";
         const link = document.createElement('link');
         link.rel = 'icon';
-        link.href = '/img/portoLogo/iconPorto.ico';
+        link.href = '/img/Logos/Diagnoscar.ico';
         document.head.appendChild(link);
     }, []);
 
@@ -21,7 +21,7 @@ const Menu = () => {
 
                 <article className={styles.botaoEtexto}>
                     <h1 className={styles.texto}>
-                        A inteligência artificial da Porto Seguro que irá fazer um pré-diagnóstico do seu carro antes dele ir para oficina
+                        A inteligência artificial que irá fazer um pré-diagnóstico do seu carro antes dele ir para oficina
                     </h1>
 
                     <Link href="/Login">

@@ -1,6 +1,3 @@
-diagnoscar\src\app\Cadastro\page.tsx
-COPIAR ⬇⬇⬇
-
 'use client';
 import { useRouter } from 'next/navigation';
 import styles from "./Cadastro.module.css"; 
@@ -29,10 +26,10 @@ const Cadastro = () => {
     const [showPassword, setShowPassword] = useState(false);
 
     useEffect(() => {
-        document.title = "Cadastro - Diagnoscar";
+        document.title = "Cadastro - DiagnosCAR";
         const link = document.createElement('link');
         link.rel = 'icon';
-        link.href = '/img/portoLogo/iconPorto.ico';
+        link.href = '/img/portoLogo/Diagnoscar.ico';
         document.head.appendChild(link);
     }, []);
 

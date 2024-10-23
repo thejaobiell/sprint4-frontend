@@ -15,8 +15,13 @@ const RelatorioDiagnoscar = () => {
     };
 
     useEffect(() => {
-        document.title = "Início do Pré-Diagnóstico - Diagnoscar";
+        document.title = "Começando Pré-Diagnóstico - DiagnosCAR";
+        const link = document.createElement('link');
+        link.rel = 'icon';
+        link.href = '/img/Logos/Diagnoscar.ico';
+        document.head.appendChild(link);
     }, []);
+
 
     const [mostrarChat, setMostrarChat] = useState(false);
     const alternarChat = () => {

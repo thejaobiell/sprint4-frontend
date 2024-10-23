@@ -31,10 +31,10 @@ const Login = () => {
     }
 
     useEffect(() => {
-        document.title = "Login - Diagnoscar";
+        document.title = "Login - DiagnosCAR";
         const link = document.createElement('link');
         link.rel = 'icon';
-        link.href = '/img/portoLogo/iconPorto.ico';
+        link.href = '/img/Logos/Diagnoscar.ico';
         document.head.appendChild(link);
     }, []);
 

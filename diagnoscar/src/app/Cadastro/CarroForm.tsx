@@ -1,6 +1,3 @@
-diagnoscar\src\app\Cadastro\CarroForm.tsx
-COPIAR ⬇⬇⬇
-
 import React from 'react';
 import styles from "./Cadastro.module.css";
 
