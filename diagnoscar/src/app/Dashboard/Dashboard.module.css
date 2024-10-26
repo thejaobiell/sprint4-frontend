@@ -1,10 +1,10 @@
-.logoutButton{
+.logoutButton {
     width: 100%;
     max-width: 200px;
     height: 65px;
     font-size: 16px;
     border-radius: 20px;
-    border: 3px solid #B6B6B6;;
+    border: 3px solid #B6B6B6;
     background: #979797;
     color: #fff;
     font-weight: bold;
@@ -13,11 +13,11 @@
     display: block;
 }
 
-.logoutButton:hover{
+.logoutButton:hover {
     background: #5f5f5f;
 }
 
-.cancelButton{
+.cancelButton {
     width: 100%;
     max-width: 200px;
     height: 65px;
@@ -32,8 +32,8 @@
     display: block;
 }
 
-.cancelButton:hover{
-    background:red;
+.cancelButton:hover {
+    background: red;
 }
 
 .container {
@@ -41,6 +41,9 @@
     justify-content: space-between;
     align-items: flex-start;
     gap: 20px;
+    padding: 15px;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .fieldset {
@@ -50,6 +53,11 @@
     flex: 0.4;
     background-color: #f9f9f9;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+}
+
+.info_usuario {
+    width: 100%;
 }
 
 .selecao_carro {
@@ -108,6 +116,8 @@
 }
 
 .inputField {
+    width: 100%;
+    padding-right:40px;
     padding: 8px;
     margin-bottom: 10px;
     border: 2px solid #CCCCCC;
@@ -117,17 +127,95 @@
     box-sizing: border-box;
 }
 
+.passwordWrapper {
+    position: relative;
+    width: 100%;
+}
+
+.toggleButton {
+    position: absolute;
+    top: 45%;
+    right: 10px;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: #007bff;
+    font-size: 1em;
+    padding: 0;
+    margin: 0;
+    line-height: 1;
+}
+
+.info p {
+    margin: 8px 0;
+}
+
+.legend h1 {
+    margin: 0;
+    padding: 0;
+    font-size: 1.5em;
+}
+
+.inputField {
+    padding: 10px;
+    font-size: 1.2rem
+}
+
 @media (max-width: 767px) {
     .container {
         flex-direction: column;
+        padding: 0;
+        margin: 0;
+        width: 100vw;
+        overflow-x: hidden;
+    }
+
+    .fieldset {
+        width: 100vw;
+        margin: 0;
+        padding: 10px;
+        border-left: none;
+        border-right: none;
+        border-radius: 0;
+        flex: none;
+        box-sizing: border-box;
+    }
+
+    .info_usuario {
+        width: 100%;
+        max-width: none;
     }
 
     .lista {
         grid-template-columns: 1fr;
+        padding: 10px;
     }
 
     .img {
         max-width: 100%;
+    }
+
+    .inputField,
+    .label,
+    .passwordWrapper {
+        width: 100%;
+        max-width: none;
+    }
+
+    .botao,
+    .cancelButton,
+    .logoutButton {
+        width: 100%;
+        margin: 10px auto;
+    }
+
+    .info {
+        padding: 0 10px;
+    }
+
+    .selecao_carro {
+        width: 100%;
     }
 }
 
@@ -166,8 +254,9 @@
         text-align: center;
         font-size: 1.2rem;
     }
-}
 
-.logoutButton {
-    margin-top: 20px;
+    .inputField{
+        width: 100%;
+        max-width: none;
+    }
 }
