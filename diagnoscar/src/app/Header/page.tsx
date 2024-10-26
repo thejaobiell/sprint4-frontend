@@ -1,29 +1,45 @@
 import styles from './Header.module.css';
 import Link from 'next/link';
+import localFont from 'next/font/local';
+
+const fonto = localFont({
+    src: "../../font/FugazOne-Regular.woff",
+    variable: "--FontDifera",
+    weight: "400",
+});
 
 const Header = () => {
     return (
-        <main className = {styles.main} >
-
+        <main className={styles.main}>
             <header className={styles.header}>
-                <Link href="/">
-                    <img id="logo" src="/img/Logos/TESTE.png" alt="Logo DiagnoCAR" />
-                </Link>
+                <div className={styles.headerContent}>
+                    <Link href="/">
+                        <img 
+                            className={styles.logo} 
+                            src="/img/Logos/Logo sem Nome.png" 
+                            alt="DiagnoCAR Company Logo" 
+                        />
+                    </Link>
 
-                <h1>
-                    <span className={styles.lefti}>Diagnos</span><span className={styles.righti}>CAR</span>
-                </h1>
+                    <h1 className={`${styles.Diagnoscar} ${fonto.variable}`}>
+                        DiagnosCAR
+                    </h1>
+                </div>
 
                 <nav>
                     <ul className={styles.navUl}>
-                        <li className={styles.navLi}><Link className={styles.navLink} href="/">Home</Link></li>
-                        <li className={styles.navLi}><Link className={styles.navLink} href="/Login">Login</Link></li>
-                        <li className={styles.navLi}><Link className={styles.navLink} href="/Membros">Membros</Link></li>
+                        <li className={styles.navLi}>
+                            <Link className={styles.navLink} href="/">Home</Link>
+                        </li>
+                        <li className={styles.navLi}>
+                            <Link className={styles.navLink} href="/Login">Login</Link>
+                        </li>
+                        <li className={styles.navLi}>
+                            <Link className={styles.navLink} href="/Membros">Membros</Link>
+                        </li>
                     </ul>
                 </nav>
-
             </header>
-            
         </main>
     );
 };

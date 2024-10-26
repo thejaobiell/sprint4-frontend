@@ -1,10 +1,11 @@
-import '../styles/reset.css';  
+import '../styles/global.css';  
 import type { Metadata } from "next";
 import Header from './Header/page'; 
 import Footer from './Footer/Footer';
+import styles from '../styles/layout.module.css';
 
 export const metadata: Metadata = {
-  title: "Diagnoscar"
+  title: "DiagnosCAR"
 };
 
 export default function RootLayout({
@@ -14,10 +15,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-br">
-      <body className="tudo">
+      <body className={styles.rootLayout}>
         <Header />
-        {children}
-        <Footer/>
+        <div className={styles.content}>{children}</div> 
+        <Footer />
       </body>
     </html>
   );
