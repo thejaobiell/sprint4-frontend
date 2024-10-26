@@ -19,25 +19,24 @@
 }
 
 .fecharChat {
-    background: #ff0000;
+    background: #B6B6B6;
     color: #fff;
-    border: none;
+    border: 3px solid rgba(0, 0, 0, 0.3);
     padding: 10px;
     cursor: pointer;
     text-align: center;
+}
+
+.fecharChat:hover{
+    background: #535353 
 }
 
 .informacoes,
 .descricao,
 .preDiagnostico {
     margin-bottom: 20px;
-    height: 129px;
-}
-
-.informacoes p,
-.descricao p,
-.preDiagnostico p {
-    margin: 8px 0;
+    padding: 10px;
+    height: auto;
 }
 
 .botao {
@@ -47,10 +46,9 @@
     border: 3px solid #B6B6B6;
     background: #009FE3;
     color: #fff;
-    font-size: 16px;
     font-weight: bold;
     cursor: pointer;
-    margin: 15px 0 10px;
+    margin: 15px 0;
     display: block;
 }
 
@@ -68,38 +66,26 @@
     .chatContainer {
         width: 100%;
         height: 100%;
-        top: 0;
-        right: 0;
         border-left: none;
         border-top: 2px solid #B6B6B6;
         box-shadow: none;
     }
 
-    .fecharChat {
-        background: #ff0000;
-        color: #fff;
-        border: none;
-        padding: 10px;
-        cursor: pointer;
-        text-align: center;
+    .botao {
+        font-size: 14px;
+        padding: 8px;
     }
 
-    .informacoes,
-    .descricao,
-    .preDiagnostico {
-        height: auto;
+    .informacoes h2,
+    .descricao h2,
+    .preDiagnostico h1 {
+        font-size: 16px;
     }
 
     .informacoes p,
     .descricao p,
     .preDiagnostico p {
-        margin: 8px 0;
-    }
-
-    .botao {
-        height: 50px;
-        font-size: 14px;
-        padding: 8px;
+        font-size: 12px;
     }
 }
 
@@ -109,27 +95,30 @@
     .descricao,
     .preDiagnostico {
         margin-bottom: 25px;
-        height: 111px;
-    }
-
-    .informacoes p,
-    .descricao p,
-    .preDiagnostico p {
-        margin: 9px 0;
     }
 
     .botao {
         height: 55px;
         border-radius: 22px;
-        border: 4px solid #B6B6B6;
         font-size: 17px;
-        margin: 18px 0 12px;
     }
 
     .duplabotao {
-        display: flex;
-        justify-content: space-between;
+        flex-direction: row;
         gap: 12px;
+        margin-top: 240px;
+    }
+
+    .informacoes h2,
+    .descricao h2,
+    .preDiagnostico h1 {
+        font-size: 18px;
+    }
+
+    .informacoes p,
+    .descricao p,
+    .preDiagnostico p {
+        font-size: 14px;
     }
 }
 
@@ -139,27 +128,30 @@
     .descricao,
     .preDiagnostico {
         margin-bottom: 30px;
-        height: 129px;
-    }
-
-    .informacoes p,
-    .descricao p,
-    .preDiagnostico p {
-        margin: 10px 0;
     }
 
     .botao {
         height: 60px;
         border-radius: 25px;
-        border: 4px solid #B6B6B6;
         font-size: 18px;
-        margin: 20px 0 12px;
     }
 
     .duplabotao {
-        display: flex;
-        justify-content: space-between;
+        flex-direction: row;
         gap: 12px;
+        margin-top: 200px;
+    }
+
+    .informacoes h2,
+    .descricao h2,
+    .preDiagnostico h1 {
+        font-size: 20px;
+    }
+
+    .informacoes p,
+    .descricao p,
+    .preDiagnostico p {
+        font-size: 16px;
     }
 }
 
@@ -168,22 +160,28 @@
     .informacoes,
     .descricao,
     .preDiagnostico {
-        margin-bottom: 30px;
-        height: 111px;
         margin-left: 20px;
+    }
+
+    .duplabotao {
+        margin-top: 175px;
+    }
+
+    .informacoes h2,
+    .descricao h2,
+    .preDiagnostico h1 {
+        font-size: 22px;
     }
 
     .informacoes p,
     .descricao p,
     .preDiagnostico p {
-        margin: 10px 0;
+        font-size: 18px;
     }
 
-    .botao {
-        height: 60px;
-        border-radius: 25px;
-        border: 4px solid #B6B6B6;
-        font-size: 18px;
-        margin: 20px 0 12px;
-    }
+        .duplabotao{
+            margin-top: 300px;
+            flex-direction: row;
+            gap: 10px;
+        }
 }
