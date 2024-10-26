@@ -2,6 +2,7 @@
 import { useRouter } from 'next/navigation';
 import styles from './Dashboard.module.css';
 import { useEffect, useState } from 'react';
+import InputMask from 'react-input-mask';
 
 interface Carro {
   placa: string;
@@ -24,12 +25,12 @@ interface UserData {
   nome: string;
   sobrenome: string;
   dataNasc: string;
-  sexo: string;
+  genero: string;
   email: string;
   cpf: string;
   cnh: string;
   rg: string;
-  senha: string; // Adicionado
+  senha: string; 
   endereco: Endereco; 
   carros: Carro[];
 }
@@ -44,26 +45,38 @@ const Dashboard = () => {
   const router = useRouter();
 
   useEffect(() => {
-    document.title = "Escolha o Carro Defeituoso - DiagnosCAR";
+    document.title = "Dashboard - DiagnosCAR";
     const link = document.createElement('link');
     link.rel = 'icon';
     link.href = '/img/Logos/Diagnoscar.ico';
     document.head.appendChild(link);
+  }, [])
+
+  useEffect(() => {
+    const logado = sessionStorage.getItem('logado');
+    if (logado !== 'sim') {
+      router.push('/Login');
+    }
 
     const dataUserArmazenados = localStorage.getItem('user');
     if (dataUserArmazenados) {
       const dataAnalisado: UserData = JSON.parse(dataUserArmazenados);
       setCarros(dataAnalisado.carros);
       setUserData(dataAnalisado);
-      setSenha(dataAnalisado.senha || ''); // Adicionado
+      setSenha(dataAnalisado.senha || ''); 
     }
-  }, []);
+  }, [router]);
 
-  const ClickImagem = () => {
-    router.push('/relatoriodiagnoscar');
+  const ClickImagem = (carro: Carro) => {
+    return () => {
+      localStorage.setItem('carroSelecionado', JSON.stringify(carro));
+      router.push('/Pre-Diagnostico');
+    };
   };
 
   const logout = () => {
+    sessionStorage.removeItem('logado');
+    localStorage.removeItem('carroSelecionado');
     router.push('/Login');
   };
 
@@ -82,12 +95,12 @@ const Dashboard = () => {
   };
 
   const buscaCep = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const cepUSER = e.target.value.replace(/\D/g, '');
-    setCep(cepUSER);
+    const CepUser = e.target.value.replace(/\D/g, '');
+    setCep(CepUser);
 
-    if (cepUSER.length === 8) {
+    if (CepUser.length === 8) {
       try {
-        const response = await fetch(`https://viacep.com.br/ws/${cepUSER}/json/`);
+        const response = await fetch(`https://viacep.com.br/ws/${CepUser}/json/`);
         const dadosCEP = await response.json();
 
         if (!dadosCEP.erro) {
@@ -99,7 +112,7 @@ const Dashboard = () => {
               bairro: dadosCEP.bairro,
               cidade: dadosCEP.localidade,
               estado: dadosCEP.uf,
-              cep: cepUSER,
+              cep: CepUser,
             },
           }));
         }
@@ -115,7 +128,7 @@ const Dashboard = () => {
 
   const salvarEdicao = () => {
     if (userData) {
-      localStorage.setItem('user', JSON.stringify({ ...userData, senha })); // Adicionado
+      localStorage.setItem('user', JSON.stringify({ ...userData, senha })); 
       alert('Informações salvas com sucesso!');
       setEstaEditando(false);
     }
@@ -131,8 +144,13 @@ const Dashboard = () => {
     if (dataUserArmazenados) {
       const data = JSON.parse(dataUserArmazenados);
       setUserData(data);
-      setSenha(data.senha || ''); // Adicionado
+      setSenha(data.senha || ''); 
     }
+  };
+
+  const handleCepChange = (e) => {
+    buscaCep(e);
+    lidarMudancas(e);
   };
 
   return (
@@ -174,10 +192,10 @@ const Dashboard = () => {
                     />
                   </label><br/>
 
-                  <label>Sexo: <br/> 
+                  <label>Gênero: <br/> 
                     <select
-                      name="sexo"
-                      value={userData.sexo || ''}
+                      name="genero"
+                      value={userData.genero || ''}
                       onChange={lidarMudancas}
                       className={styles.inputField}
                     >
@@ -185,6 +203,7 @@ const Dashboard = () => {
                       <option value="M">Masculino</option>
                       <option value="F">Feminino</option>
                       <option value="O">Outro</option>
+                      <option value="ND">Prefiro não dizer</option>
                     </select>
                   </label><br/>
 
@@ -198,37 +217,7 @@ const Dashboard = () => {
                     />
                   </label><br/>
 
-                  <label>CPF: <br/>
-                    <input
-                      type="text"
-                      name="cpf"
-                      value={userData.cpf || ''}
-                      onChange={lidarMudancas}
-                      className={styles.inputField}
-                    />
-                  </label><br/>
-
-                  <label>CNH: <br/> 
-                    <input
-                      type="text"
-                      name="cnh"
-                      value={userData.cnh || ''}
-                      onChange={lidarMudancas}
-                      className={styles.inputField}
-                    />
-                  </label><br/>
-
-                  <label>RG: <br/>                                                 
-                    <input
-                      type="text"
-                      name="rg"
-                      value={userData.rg || ''}
-                      onChange={lidarMudancas}
-                      className={styles.inputField}
-                    />
-                  </label><br/>
-
-                  <label>Senha: <br /> 
+                  <label>Senha: <br />
                     <div className={styles.passwordWrapper}>
                       <input 
                         type={showPassword ? 'text' : 'password'}
@@ -248,15 +237,46 @@ const Dashboard = () => {
                         {showPassword ? '👁️' : '🙈'}
                       </button>
                     </div>
+                  </label>
+
+
+                  <label>CPF: <br/>
+                    <input
+                      type="text"
+                      name="cpf"
+                      value={userData.cpf || ''}
+                      readOnly
+                      className={styles.inputField}
+                    />
                   </label><br/>
 
-                  {/* Campos do Endereço */}
-                  <label>CEP: <br/>
+                  <label>CNH: <br/> 
                     <input
+                      type="text"
+                      name="cnh"
+                      value={userData.cnh || ''}
+                      readOnly
+                      className={styles.inputField}
+                    />
+                  </label><br/>
+
+                  <label>RG: <br/>                                                 
+                    <input
+                      type="text"
+                      name="rg"
+                      value={userData.rg || ''}
+                      readOnly
+                      className={styles.inputField}
+                    />
+                  </label><br/>
+
+                  <label>CEP: <br/>
+                    <InputMask
+                      mask="99999-999"
                       type="text"
                       name="cep"
                       value={userData.endereco.cep || ''}
-                      onChange={buscaCep} // Usar buscaCep
+                      onChange={handleCepChange}
                       className={styles.inputField}
                     />
                   </label><br/>
@@ -268,12 +288,13 @@ const Dashboard = () => {
                       value={userData.endereco.rua || ''}
                       onChange={lidarMudancas}
                       className={styles.inputField}
+                      readOnly
                     />
                   </label><br/>
 
                   <label>Número: <br/>
                     <input
-                      type="text"
+                      type="number"
                       name="numeroResidencial"
                       value={userData.endereco.numeroResidencial || ''}
                       onChange={lidarMudancas}
@@ -298,6 +319,7 @@ const Dashboard = () => {
                       value={userData.endereco.bairro || ''}
                       onChange={lidarMudancas}
                       className={styles.inputField}
+                      readOnly
                     />
                   </label><br/>
 
@@ -308,6 +330,7 @@ const Dashboard = () => {
                       value={userData.endereco.cidade || ''}
                       onChange={lidarMudancas}
                       className={styles.inputField}
+                      readOnly
                     />
                   </label><br/>
 
@@ -318,6 +341,7 @@ const Dashboard = () => {
                       value={userData.endereco.estado || ''}
                       onChange={lidarMudancas}
                       className={styles.inputField}
+                      readOnly
                     />
                   </label><br/>
 
@@ -336,8 +360,9 @@ const Dashboard = () => {
                   <p>Nome: {userData.nome}</p>
                   <p>Sobrenome: {userData.sobrenome}</p>
                   <p>Data de Nascimento: {userData.dataNasc}</p>
-                  <p>Sexo: {userData.sexo}</p>
+                  <p>Gênero: {userData.genero}</p>
                   <p>Email: {userData.email}</p>
+                  <p>Senha: {"*".repeat(userData.senha.length)}</p>
                   <p>CPF: {userData.cpf}</p>
                   <p>CNH: {userData.cnh}</p>
                   <p>RG: {userData.rg}</p>
@@ -370,7 +395,7 @@ const Dashboard = () => {
                       src="/img/carro/CarroGenerico.png"
                       alt="Imagem genérica de Carro"
                       className={styles.img}
-                      onClick={ClickImagem}
+                      onClick={ClickImagem(carro)}
                     />
                     <div className={styles.info}>
                       <p>Marca: {carro.marca}</p>
