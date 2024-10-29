@@ -12,25 +12,25 @@ interface CarroFormProps {
 const CarroForm: React.FC<CarroFormProps> = ({ index, carro, handleInputChange, removerCarro, carros }) => {
     const [customColor, setCustomColor] = useState('');
 
-    const handleUppercaseInput = (e) => {
+    const handleUppercaseInput = (e: React.ChangeEvent<HTMLInputElement>) => {
         e.target.value = e.target.value.toUpperCase();
         handleInputChange(index, e);
     };
 
     const handleColorChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const { value } = e.target;
-        handleInputChange(index, e);
+        handleInputChange(index, e); // Atualiza a cor selecionada
         if (value === "Outro") {
-            setCustomColor(carro.cor);
+            setCustomColor(carro.cor); // Resgata a cor personalizada se já estiver setada
         } else {
-            setCustomColor('');
+            setCustomColor(''); // Limpa a cor personalizada se uma cor padrão for selecionada
         }
     };
 
-    const handleCustomColorInputChange = (e) => {
+    const handleCustomColorInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { value } = e.target;
         setCustomColor(value);
-        handleInputChange(index, { ...e, target: { ...e.target, value } });
+        handleInputChange(index, { ...e, target: { ...e.target, value } }); // Atualiza a cor personalizada
     };
 
     return (

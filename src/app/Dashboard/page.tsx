@@ -148,7 +148,7 @@ const Dashboard = () => {
     }
   };
 
-  const handleCepChange = (e) => {
+  const handleCepChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     buscaCep(e);
     lidarMudancas(e);
   };
