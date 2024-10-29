@@ -149,6 +149,10 @@
         font-size: 27px;
         border-radius: 30px;
     }
+
+    .toggleButton {
+        font-size: 1.5rem;
+    }
 }
 
 @media (min-width: 1200px) {
@@ -174,5 +178,10 @@
         height: 80px;
         font-size: 26px;
         border-radius: 40px;
+    }
+
+    .toggleButton{
+        margin-top: 10px;
+        font-size: 2rem;
     }
 }

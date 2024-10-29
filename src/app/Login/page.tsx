@@ -15,11 +15,12 @@ const Login = () => {
     const handleLogin = (e: React.FormEvent) => {
         e.preventDefault(); 
 
-        const user = localStorage.getItem('user');
+        const user = sessionStorage.getItem('user');
         if (user) {
             const analiseUser = JSON.parse(user);
 
             if (analiseUser.email === email && analiseUser.senha === senha) {
+                sessionStorage.setItem('logado', 'sim');
                 router.push('/Dashboard');
             } else {
                 setError('Email ou senha incorretos');
@@ -47,7 +48,7 @@ const Login = () => {
         <section className={styles.section}>
             <form id={styles.LOGIN} onSubmit={handleLogin}>
                 <fieldset className={styles.fieldset}>
-                    <legend>Login</legend>
+                    <legend><h1>LOGIN</h1></legend>
                     
                     <label htmlFor="txtEmail">
                         <h1>Email:</h1>

@@ -1,18 +1,36 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styles from "./Cadastro.module.css";
 
 interface CarroFormProps {
     index: number;
-    carro: { placa: string; marca: string; modelo: string; ano: string };
-    handleInputChange: (index: number, e: React.ChangeEvent<HTMLInputElement>) => void;
+    carro: { placa: string; marca: string; modelo: string; ano: string; cor: string };
+    handleInputChange: (index: number, e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
     removerCarro: (index: number) => void;
-    carros: { placa: string; marca: string; modelo: string; ano: string }[];
+    carros: { placa: string; marca: string; modelo: string; ano: string; cor: string }[];
 }
 
 const CarroForm: React.FC<CarroFormProps> = ({ index, carro, handleInputChange, removerCarro, carros }) => {
-    const handleUppercaseInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const [customColor, setCustomColor] = useState('');
+
+    const handleUppercaseInput = (e) => {
         e.target.value = e.target.value.toUpperCase();
         handleInputChange(index, e);
+    };
+
+    const handleColorChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        const { value } = e.target;
+        handleInputChange(index, e);
+        if (value === "Outro") {
+            setCustomColor(carro.cor);
+        } else {
+            setCustomColor('');
+        }
+    };
+
+    const handleCustomColorInputChange = (e) => {
+        const { value } = e.target;
+        setCustomColor(value);
+        handleInputChange(index, { ...e, target: { ...e.target, value } });
     };
 
     return (
@@ -31,7 +49,7 @@ const CarroForm: React.FC<CarroFormProps> = ({ index, carro, handleInputChange, 
                     required
                     className={styles.inputField}
                 />
-            </label>
+            </label> <br/>
 
             <label className={styles.label}>
                 Marca: <br />
@@ -71,8 +89,7 @@ const CarroForm: React.FC<CarroFormProps> = ({ index, carro, handleInputChange, 
                     <option value="Volkswagen">Volkswagen</option>
                     <option value="Volvo">Volvo</option>
                 </select>
-            </label>
-
+            </label> <br/>
 
             <label className={styles.label}>
                 Modelo: <br />
@@ -85,7 +102,7 @@ const CarroForm: React.FC<CarroFormProps> = ({ index, carro, handleInputChange, 
                     required
                     className={styles.inputField}
                 />
-            </label>
+            </label> <br/>
 
             <label className={styles.label}>
                 Ano: <br />
@@ -98,9 +115,47 @@ const CarroForm: React.FC<CarroFormProps> = ({ index, carro, handleInputChange, 
                     required
                     className={styles.inputField}
                     min="1950"
-                    max={new Date().getFullYear()}
+                    max="2025"
                 />
-            </label>
+            </label> <br/>
+
+            <label className={styles.label}>
+                Cor: <br />
+                <select
+                    name="cor"
+                    value={carro.cor}
+                    onChange={handleColorChange}
+                    required
+                    className={styles.inputField}
+                >
+                    <option value="" disabled>Selecione a cor</option>
+                    <option value="Preto">Preto</option>
+                    <option value="Branco">Branco</option>
+                    <option value="Vermelho">Vermelho</option>
+                    <option value="Azul">Azul</option>
+                    <option value="Verde">Verde</option>
+                    <option value="Cinza">Cinza</option>
+                    <option value="Amarelo">Amarelo</option>
+                    <option value="Prata">Prata</option>
+                    <option value="Laranja">Laranja</option>
+                    <option value="Roxo">Roxo</option>
+                    <option value="Outro">Outro</option>
+                </select>
+            </label> <br/>
+
+            {carro.cor === "Outro" && (
+                <label className={styles.label}>
+                    Especifique a cor: <br />
+                    <input
+                        type="text"
+                        name="customCor"
+                        value={customColor}
+                        onChange={handleCustomColorInputChange}
+                        placeholder="Digite a cor ou código (#RRGGBB)"
+                        className={styles.inputField}
+                    />
+                </label>
+            )}
 
             {carros.length > 1 && (
                 <button

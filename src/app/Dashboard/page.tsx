@@ -58,7 +58,7 @@ const Dashboard = () => {
       router.push('/Login');
     }
 
-    const dataUserArmazenados = localStorage.getItem('user');
+    const dataUserArmazenados = sessionStorage.getItem('user');
     if (dataUserArmazenados) {
       const dataAnalisado: UserData = JSON.parse(dataUserArmazenados);
       setCarros(dataAnalisado.carros);

@@ -9,7 +9,7 @@ const Cadastro = () => {
     const [nome, setNome] = useState('');
     const [sobrenome, setSobrenome] = useState('');
     const [dataNasc, setDataNasc] = useState('');
-    const [sexo, setSexo] = useState('');
+    const [genero, setGenero] = useState('');
     const [email, setEmail] = useState('');
     const [senha, setSenha] = useState('');
     const [cpf, setCpf] = useState('');
@@ -59,6 +59,11 @@ const Cadastro = () => {
     const handleRegister = (e: React.FormEvent) => {
         e.preventDefault();
 
+    if (senha.length < 6) {
+        alert("A senha deve ter pelo menos 6 caracteres.");
+        return;
+    }
+
     const endereco = {
         rua,
         numeroResidencial,
@@ -73,7 +78,7 @@ const Cadastro = () => {
         nome,
         sobrenome,
         dataNasc,
-        sexo,
+        genero,
         email,
         senha,
         cpf,
@@ -83,7 +88,7 @@ const Cadastro = () => {
         carros
     };
 
-        localStorage.setItem('user', JSON.stringify(user));
+        sessionStorage.setItem('user', JSON.stringify(user));
         router.push('/Login');
     };
 
@@ -119,7 +124,6 @@ const Cadastro = () => {
                             <input 
                                 type="text" 
                                 name="Nome" 
-                                id="Nome" 
                                 placeholder="Digite seu Nome" 
                                 value={nome}
                                 onChange={(e) => setNome(e.target.value)} 
@@ -132,7 +136,6 @@ const Cadastro = () => {
                             <input 
                                 type="text" 
                                 name="Sobrenome" 
-                                id="Sobrenome" 
                                 placeholder="Digite seu Sobrenome" 
                                 value={sobrenome}
                                 onChange={(e) => setSobrenome(e.target.value)} 
@@ -145,7 +148,6 @@ const Cadastro = () => {
                             <input 
                                 type="date" 
                                 name="dataNascimento" 
-                                id="dataNascimento" 
                                 min="1900-01-01" 
                                 max="2006-12-31"
                                 value={dataNasc}
@@ -155,61 +157,38 @@ const Cadastro = () => {
                             /> 
                         </label><br />
 
-                        <label className={styles.label}>Sexo:
-                            <label> 
-                                <input 
-                                    type="radio" 
-                                    name="sexo" 
-                                    id="sexoM" 
-                                    value="M"
-                                    onChange={(e) => setSexo(e.target.value)}
-                                    required  
-                                    className={styles.radioInput}
-                                /> Masculino 
-                            </label>
-
-                            <label className={styles.label}>
-                                <input 
-                                    type="radio" 
-                                    name="sexo" 
-                                    id="sexoF" 
-                                    value="F"
-                                    onChange={(e) => setSexo(e.target.value)} 
-                                    className={styles.radioInput}
-                                /> Feminino 
-                            </label>
-
-                            <label className={styles.label}>
-                                <input 
-                                    type="radio" 
-                                    name="sexo" 
-                                    id="sexoOutro" 
-                                    value="O"
-                                    onChange={(e) => setSexo(e.target.value)}
-                                    className={styles.radioInput}
-                                /> Outro 
-                            </label>
-                        </label> <br />
+                        <label className={styles.label}>Gênero:
+                            <select 
+                                name="genero" 
+                                onChange={(e) => setGenero(e.target.value)} 
+                                required 
+                                className={styles.inputField}
+                            >
+                                <option value="" disabled selected>Selecione...</option>
+                                <option value="M">Masculino</option>
+                                <option value="F">Feminino</option>
+                                <option value="O">Outro</option>
+                                <option value="ND">Prefiro não dizer</option>
+                            </select>
+                        </label><br />
 
                         <label className={styles.label}>E-mail: <br /> 
                             <input 
                                 type="email" 
-                                name="email" 
-                                id="email" 
+                                name="email"  
                                 placeholder="Digite seu e-mail" 
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                                 required  
                                 className={styles.inputField}
                             /> 
-                        </label>
+                        </label><br/>
 
                         <label className={styles.label}>Senha: <br /> 
                             <div className={styles.passwordWrapper}>
                                 <input 
                                     type={showPassword ? 'text' : 'password'}
                                     name="senha" 
-                                    id="senha" 
                                     placeholder="Digite uma senha"
                                     value={senha}
                                     onChange={(e) => setSenha(e.target.value)} 
@@ -224,7 +203,7 @@ const Cadastro = () => {
                                     {showPassword ? '👁️' : '🙈'}
                                 </button>
                             </div>
-                        </label>
+                        </label><br/>
                     </fieldset>
 
                     <fieldset className={styles.fieldset}>
@@ -234,7 +213,6 @@ const Cadastro = () => {
                             <InputMask
                                 mask="99999-999"
                                 type="text" 
-                                id="cep" 
                                 name="cep" 
                                 placeholder="Digite seu CEP" 
                                 value={cep}
@@ -247,7 +225,6 @@ const Cadastro = () => {
                         <label className={styles.label}> Rua: <br />
                             <input
                                 type="text" 
-                                id="rua" 
                                 name="rua" 
                                 placeholder="Digite sua Rua"
                                 value={rua}
@@ -255,12 +232,11 @@ const Cadastro = () => {
                                 className={styles.inputField} 
                                 readOnly
                             />
-                        </label>
+                        </label><br/>
 
                         <label className={styles.label}> Número Residencial: <br />
                             <input
-                                type="text" 
-                                id="numeroResidencial" 
+                                type="number"  
                                 name="numeroResidencial" 
                                 placeholder="Digite o Número Residencial"
                                 value={numeroResidencial}
@@ -269,12 +245,11 @@ const Cadastro = () => {
                                 required 
                             />
                         <p className={styles.letrinhas}>Se caso não houver, digite 00 </p> <br />
-                        </label>
+                        </label><br/>
 
                         <label className={styles.label}> Complemento: <br />
                             <input
                                 type="text" 
-                                id="complemento" 
                                 name="complemento" 
                                 placeholder="Digite um Complemento"
                                 value={complemento}
@@ -282,12 +257,11 @@ const Cadastro = () => {
                                 className={styles.inputField} 
                             />
                         <p className={styles.letrinhas}>NÃO OBRIGATÓRIO</p> <br />
-                        </label>
+                        </label><br/>
 
                         <label className={styles.label}> Bairro: <br />
                             <input
                                 type="text" 
-                                id="bairro" 
                                 name="bairro" 
                                 placeholder="Digite seu Bairro"
                                 value={bairro}
@@ -295,12 +269,11 @@ const Cadastro = () => {
                                 className={styles.inputField} 
                                 readOnly
                             />
-                        </label>
+                        </label><br/>
 
                         <label className={styles.label}> Cidade: <br />
                             <input
                                 type="text" 
-                                id="cidade" 
                                 name="cidade" 
                                 placeholder="Digite sua Cidade"
                                 value={cidade}
@@ -308,12 +281,11 @@ const Cadastro = () => {
                                 className={styles.inputField} 
                                 readOnly
                             />
-                        </label>
+                        </label><br/>
 
                         <label className={styles.label}> Estado: <br />
                             <input
                                 type="text" 
-                                id="estado" 
                                 name="estado" 
                                 placeholder="Digite seu Estado"
                                 value={estado}
@@ -321,7 +293,7 @@ const Cadastro = () => {
                                 className={styles.inputField} 
                                 readOnly
                             />
-                        </label>
+                        </label><br/>
                     </fieldset>
 
                     <fieldset className={styles.fieldset}>
@@ -331,43 +303,40 @@ const Cadastro = () => {
                             <InputMask
                                 mask="999.999.999-99"
                                 type="text" 
-                                id="cpf" 
                                 name="cpf" 
-                                placeholder="Digite seu CPF" 
+                                placeholder="xxx.xxx.xxx-xx" 
                                 value={cpf}
                                 onChange={(e) => setCpf(e.target.value)} 
                                 required  
                                 className={styles.inputField}
                             />
-                        </label>
+                        </label><br/>
 
                         <label className={styles.label}>CNH: <br />
                             <InputMask 
                                 mask="99999999999"
                                 type="text" 
-                                id="cnh" 
                                 name="cnh" 
-                                placeholder="Digite seu CNH" 
+                                placeholder="xxxxxxxxxxx" 
                                 value={cnh}
                                 onChange={(e) => setCnh(e.target.value)} 
                                 required 
                                 className={styles.inputField}
                             />
-                        </label>
+                        </label><br/>
 
                         <label className={styles.label}>RG: <br />
                             <InputMask
                                 mask="99.999.999-9" 
                                 type="text" 
-                                id="rg" 
                                 name="rg" 
-                                placeholder="Digite seu RG" 
+                                placeholder="xx.xxx.xxx-x" 
                                 value={rg}
                                 onChange={(e) => setRg(e.target.value)} 
                                 required  
                                 className={styles.inputField}
                             />
-                        </label>
+                        </label><br/>
                     </fieldset>
 
                     {carros.map((carro, index) => (

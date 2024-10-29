@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react';
 import styles from './PreDiagnostico.module.css';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 interface Carro {
   placa: string;
@@ -42,7 +43,7 @@ const PreDiagnostico = () => {
   }, []);
 
   const chamarGuincho = () => {
-    router.push('/envioGuincho');
+    router.push('/Guincho');
   };
 
   const oficinasParceiras = () => {
@@ -59,6 +60,13 @@ const PreDiagnostico = () => {
     }
   };
 
+    const TrocarCarro = () => {
+    setCarroSelecionado(null);
+    router.push('/Dashboard');
+  };
+
+
+
   return (
     <>
       <div className={styles.informacoes}>
@@ -73,6 +81,7 @@ const PreDiagnostico = () => {
         ) : (
           <p>Nenhum carro selecionado.</p>
         )}
+        <button className={styles.TrocarCarro}  onClick={TrocarCarro}>Trocar de Carro</button>
       </div>
 
       <div className={styles.descricao}>
@@ -112,21 +121,24 @@ const PreDiagnostico = () => {
           <div className={styles.chatBox}>
             <div className={styles.mensagens}>
               {mensagensChat.map((msg, index) => (
-                <p key={index} className={msg.tipo === 'user' ? styles.userMessage : styles.botMessage}>
+                <p key={index} className={msg.tipo === 'user' ? styles.userMensagem : styles.iaMensagem}>
                   {msg.texto}
                 </p>
               ))}
             </div>
-            <input
-              type="text"
-              value={mensagem}
-              onChange={(e) => setMensagem(e.target.value)}
-              placeholder="Digite sua mensagem"
-              className={styles.inputChat}
-            />
-            <button onClick={enviarMensagem} className={styles.botaoEnviar}>
-              Enviar
-            </button>
+            <div className={styles.inputContainer}>
+              <input
+                type="text"
+                value={mensagem}
+                onChange={(e) => setMensagem(e.target.value)}
+                onKeyDown={(e) => e.key === 'Enter' && enviarMensagem()}
+                placeholder="Digite sua mensagem"
+                className={styles.inputChat}
+              />
+              <button onClick={enviarMensagem} className={styles.botaoEnviar}>
+                Enviar
+              </button>
+            </div>
           </div>
         </div>
       )}
