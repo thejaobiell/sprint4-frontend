@@ -45,12 +45,13 @@ const Cadastro = () => {
         }
     };
 
-    const handleInputChange = (index: number, e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleInputChange = (index: number, e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
         setCarros((prevCarros) =>
             prevCarros.map((carro, i) => i === index ? { ...carro, [name]: value } : carro)
         );
     };
+
 
     const togglePasswordVisibility = () => {
         setShowPassword(!showPassword);

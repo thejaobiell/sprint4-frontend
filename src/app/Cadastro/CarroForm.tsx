@@ -1,36 +1,18 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styles from "./Cadastro.module.css";
 
 interface CarroFormProps {
     index: number;
-    carro: { placa: string; marca: string; modelo: string; ano: string; cor: string };
+    carro: { placa: string; marca: string; modelo: string; ano: string };
     handleInputChange: (index: number, e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
     removerCarro: (index: number) => void;
-    carros: { placa: string; marca: string; modelo: string; ano: string; cor: string }[];
+    carros: { placa: string; marca: string; modelo: string; ano: string }[];
 }
 
 const CarroForm: React.FC<CarroFormProps> = ({ index, carro, handleInputChange, removerCarro, carros }) => {
-    const [customColor, setCustomColor] = useState('');
-
     const handleUppercaseInput = (e: React.ChangeEvent<HTMLInputElement>) => {
         e.target.value = e.target.value.toUpperCase();
         handleInputChange(index, e);
-    };
-
-    const handleColorChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        const { value } = e.target;
-        handleInputChange(index, e); // Atualiza a cor selecionada
-        if (value === "Outro") {
-            setCustomColor(carro.cor); // Resgata a cor personalizada se já estiver setada
-        } else {
-            setCustomColor(''); // Limpa a cor personalizada se uma cor padrão for selecionada
-        }
-    };
-
-    const handleCustomColorInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { value } = e.target;
-        setCustomColor(value);
-        handleInputChange(index, { ...e, target: { ...e.target, value } }); // Atualiza a cor personalizada
     };
 
     return (
@@ -118,44 +100,6 @@ const CarroForm: React.FC<CarroFormProps> = ({ index, carro, handleInputChange, 
                     max="2025"
                 />
             </label> <br/>
-
-            <label className={styles.label}>
-                Cor: <br />
-                <select
-                    name="cor"
-                    value={carro.cor}
-                    onChange={handleColorChange}
-                    required
-                    className={styles.inputField}
-                >
-                    <option value="" disabled>Selecione a cor</option>
-                    <option value="Preto">Preto</option>
-                    <option value="Branco">Branco</option>
-                    <option value="Vermelho">Vermelho</option>
-                    <option value="Azul">Azul</option>
-                    <option value="Verde">Verde</option>
-                    <option value="Cinza">Cinza</option>
-                    <option value="Amarelo">Amarelo</option>
-                    <option value="Prata">Prata</option>
-                    <option value="Laranja">Laranja</option>
-                    <option value="Roxo">Roxo</option>
-                    <option value="Outro">Outro</option>
-                </select>
-            </label> <br/>
-
-            {carro.cor === "Outro" && (
-                <label className={styles.label}>
-                    Especifique a cor: <br />
-                    <input
-                        type="text"
-                        name="customCor"
-                        value={customColor}
-                        onChange={handleCustomColorInputChange}
-                        placeholder="Digite a cor ou código (#RRGGBB)"
-                        className={styles.inputField}
-                    />
-                </label>
-            )}
 
             {carros.length > 1 && (
                 <button
