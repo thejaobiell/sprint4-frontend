@@ -2,16 +2,14 @@
     width: 100%;
     background-color: #8F8F8F;
     text-align: center;
-    font-family: Arial, Helvetica, Roboto;
-    display: flex; /* Usando flexbox para alinhar itens */
-    flex-direction: column; /* Coloca o conteúdo na vertical */
-    padding: 20px 0; /* Espaçamento em cima e embaixo do header */
+    display: flex;
+    flex-direction: column;
 }
 
 .headerContent {
-    display: flex; /* Flexbox para alinhar logo e Diagnoscar em linha */
-    align-items: center; /* Alinha verticalmente */
-    justify-content: center; /* Centraliza horizontalmente */
+    display: flex;
+    align-items: center;
+    justify-content: center; 
 }
 
 .logo {
@@ -45,6 +43,7 @@
     text-decoration: none;
     color: black;
     font-size: 18px;
+    font-weight: bold;
 }
 
 .navLink:hover {

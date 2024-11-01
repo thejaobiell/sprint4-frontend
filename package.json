@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@types/leaflet": "^1.9.12",
+    "diagnoscar": "file:",
     "leaflet": "^1.9.4",
     "next": "14.2.14",
     "normalize.css": "^8.0.1",
