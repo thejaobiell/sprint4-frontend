@@ -11,6 +11,7 @@
   "dependencies": {
     "@types/leaflet": "^1.9.12",
     "diagnoscar": "file:",
+    "http-proxy-middleware": "^3.0.3",
     "leaflet": "^1.9.4",
     "next": "14.2.14",
     "normalize.css": "^8.0.1",

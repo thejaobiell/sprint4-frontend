@@ -1,8 +1,18 @@
 'use client';
 import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import styles from './Oficinas.module.css';
 
 const Oficinas = () => {
+    const router = useRouter();
+
+    useEffect(() => {
+        const logado = sessionStorage.getItem('logado');
+        if (logado !== 'sim') {
+            router.push('/Login');
+        }
+    }, [router]);
+
     useEffect(() => {
         document.title = "Oficinas Recomendadas - DiagnosCAR";
         const link = document.createElement('link');
@@ -47,8 +57,8 @@ const Oficinas = () => {
                             <td className={styles.td}>{oficina.Endereco_Oficina}</td>
                             <td className={styles.td}>{oficina.Cnpj_Oficina}</td>
                             <td className={styles.td}>{oficina.Nome_Oficina}</td>
-                            <td className={styles.td}>{oficina.Avaliacao_Oficina}</td>
                             <td className={styles.td}>{oficina.Especializacao_Oficina}</td>
+                            <td className={styles.td}>{oficina.Avaliacao_Oficina}</td>
                         </tr>
                     ))}
                 </tbody>

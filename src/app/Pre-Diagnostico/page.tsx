@@ -19,6 +19,13 @@ const PreDiagnostico = () => {
   const router = useRouter();
 
   useEffect(() => {
+    const logado = sessionStorage.getItem('logado');
+    if (logado !== 'sim') {
+      router.push('/Login');
+    }
+  }, [router]);
+
+  useEffect(() => {
     document.title = "Começando Pré-Diagnóstico - DiagnosCAR";
     const link = document.createElement('link');
     link.rel = 'icon';
@@ -78,7 +85,7 @@ const PreDiagnostico = () => {
   return (
     <>
       <div className={`${styles.informacoes} ${mostrarChat ? styles.chatAberto : ''}`}>
-          <h2>Informações: </h2>
+        <h2>Informações: </h2>
         {carroSelecionado ? (
           <>
             <h4>Marca: {carroSelecionado.marca}</h4>
