@@ -1,98 +1,92 @@
-.containera {
+.container {
     text-align: center;
     padding: 20px;
 }
 
-.workshops {
+.title {
+    font-size: 36px;
     margin-bottom: 20px;
 }
 
-label {
-    display: block;
-    margin: 10px 0;
-    font-size: 18px;
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
 }
 
-input[type="radio"] {
-    margin-right: 10px;
+.thead {
+    background-color: #009FE3;
 }
 
-.botao {
-    height: 70px;
-    border-radius: 30px;
-    border: 3px solid #B6B6B6;
-    background: #009FE3;
-    color: #fff;
-    font-size: 24px;
-    font-weight: bold;
-    cursor: pointer;
+.tr {
+    transition: background-color 0.3s ease;
 }
 
-.botao:hover {
-    background: #0077B6;
+.th,
+.td {
+    padding: 12px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+.th {
+    color: white;
+}
+
+.td {
+    background-color: #ffffff;
+}
+
+tbody tr:nth-child(even) .td {
+    background-color: #f2f2f2;
+}
+
+tbody tr:hover .td {
+    background-color: #ddd;
+
 }
 
 @media (max-width: 767px) {
-    .containera {
-        margin-top: 245px;
-        margin-bottom: 245px;
-    }
-    h1 {
+    .title {
         font-size: 24px;
     }
-    label {
-        font-size: 16px;
-    }
-    button {
+
+    .th,
+    .td {
         font-size: 14px;
-        padding: 8px 16px;
+        padding: 8px;
     }
 }
 
 @media (min-width: 768px) and (max-width: 991px) {
-    .containera {
-        margin-top: 185px;
-        margin-bottom: 185px;
-    }
-    h1 {
+    .title {
         font-size: 28px;
     }
-    label {
-        font-size: 18px;
-    }
-    button {
+
+    .th,
+    .td {
         font-size: 16px;
     }
 }
 
 @media (min-width: 992px) and (max-width: 1199px) {
-    .containera {
-        margin-top: 223px;
-        margin-bottom: 223px;
-    }
-    h1 {
+    .title {
         font-size: 32px;
     }
-    label {
-        font-size: 20px;
-    }
-    button {
+
+    .th,
+    .td {
         font-size: 18px;
     }
 }
 
 @media (min-width: 1200px) {
-    .containera {
-        margin-top: 185px;
-        margin-bottom: 185px;
-    }
-    h1 {
+    .title {
         font-size: 36px;
     }
-    label {
-        font-size: 22px;
-    }
-    button {
+
+    .th,
+    .td {
         font-size: 20px;
     }
 }
