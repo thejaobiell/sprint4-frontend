@@ -12,6 +12,7 @@ const Cadastro = () => {
     const [genero, setGenero] = useState('');
     const [email, setEmail] = useState('');
     const [senha, setSenha] = useState('');
+    const [confirmarSenha, setConfirmarSenha] = useState('');
     const [cpf, setCpf] = useState('');
     const [cnh, setCnh] = useState('');
     const [rg, setRg] = useState('');
@@ -23,7 +24,8 @@ const Cadastro = () => {
     const [cidade, setCidade] = useState('');
     const [estado, setEstado] = useState('');
     const [carros, setCarros] = useState([{ placa: '', marca: '', modelo: '', ano: '' }]);
-    const [showPassword, setShowPassword] = useState(false);
+    const [mostrarSenha, setMostrarSenha] = useState(false);
+    const [mostrarSenha2, setMostrarSenha2] = useState(false);
 
     useEffect(() => {
         document.title = "Cadastro - DiagnosCAR";
@@ -53,17 +55,25 @@ const Cadastro = () => {
     };
 
 
-    const togglePasswordVisibility = () => {
-        setShowPassword(!showPassword);
+    const VisibilidadeSenha = () => {
+        setMostrarSenha(!mostrarSenha);
+    };
+    const VisibilidadeSenha2 = () => {
+        setMostrarSenha2(!mostrarSenha2);
     };
 
     const handleRegister = (e: React.FormEvent) => {
         e.preventDefault();
 
-    if (senha.length < 6) {
-        alert("A senha deve ter pelo menos 6 caracteres.");
-        return;
-    }
+        if (senha.length < 6) {
+            alert("A senha deve ter pelo menos 6 caracteres.");
+            return;
+        }
+
+        if (senha !== confirmarSenha) {
+            alert("As senhas não coincidem.");
+            return;
+        }
 
     const endereco = {
         rua,
@@ -93,6 +103,27 @@ const Cadastro = () => {
         router.push('/Login');
     };
 
+    const validateCPF = async (cpf : string) => {
+        const url = `https://api.invertexto.com/v1/validator?token=15954%7Ccn6MHn9gJdaEfq1vX78gt3g7PEXv8XZ7&value=${cpf}&type=cpf`;
+
+        try {
+            const response = await fetch(url);
+            const data = await response.json();
+            console.log(data)
+
+            if (data.valid) {
+                return true;
+            } else {
+                alert('CPF inválido');
+                return false;
+            }
+        } catch (error) {
+            console.error("Erro ao validar o CPF:", error);
+            alert('Erro ao validar o CPF. Por favor, tente novamente.');
+            return false;
+        }
+    };
+
     const buscaCep = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const cepUSER = e.target.value.replace(/\D/g, '');
         setCep(cepUSER);
@@ -101,6 +132,8 @@ const Cadastro = () => {
             try {
                 const response = await fetch(`https://viacep.com.br/ws/${cepUSER}/json/`);
                 const dadosCEP = await response.json();
+                console.log(dadosCEP)
+
 
                 if (!dadosCEP.erro) {
                     setRua(dadosCEP.logradouro);
@@ -119,7 +152,7 @@ const Cadastro = () => {
             <section className={styles.forms}>
                 <form onSubmit={handleRegister}>
                     <fieldset className={styles.fieldset}>
-                        <legend className={styles.legenda}>Informações Pessoais</legend>
+                        <legend className={styles.legenda}>Dados Pessoais</legend>
 
                         <label className={styles.label}> Nome: <br /> 
                             <input 
@@ -188,7 +221,7 @@ const Cadastro = () => {
                         <label className={styles.label}>Senha: <br /> 
                             <div className={styles.passwordWrapper}>
                                 <input 
-                                    type={showPassword ? 'text' : 'password'}
+                                    type={mostrarSenha ? 'text' : 'password'}
                                     name="senha" 
                                     placeholder="Digite uma senha"
                                     value={senha}
@@ -198,10 +231,31 @@ const Cadastro = () => {
                                 />
                                 <button 
                                     type="button" 
-                                    onClick={togglePasswordVisibility}
+                                    onClick={VisibilidadeSenha}
                                     className={styles.toggleButton}
                                 >
-                                    {showPassword ? '👁️' : '🙈'}
+                                    {mostrarSenha ? '👁️' : '🙈'}
+                                </button>
+                            </div>
+                        </label><br/>
+                        
+                        <label className={styles.label}>Confirmar Senha: <br /> 
+                            <div className={styles.passwordWrapper}>
+                                <input 
+                                    type={mostrarSenha2 ? 'text' : 'password'}
+                                    name="confirmarSenha" 
+                                    placeholder="Confirme sua senha"
+                                    value={confirmarSenha}
+                                    onChange={(e) => setConfirmarSenha(e.target.value)}
+                                    required  
+                                    className={styles.inputField}
+                                />
+                                <button 
+                                    type="button" 
+                                    onClick={VisibilidadeSenha2}
+                                    className={styles.toggleButton}
+                                >
+                                    {mostrarSenha2 ? '👁️' : '🙈'}
                                 </button>
                             </div>
                         </label><br/>
@@ -257,7 +311,7 @@ const Cadastro = () => {
                                 onChange={(e) => setComplemento(e.target.value)}
                                 className={styles.inputField} 
                             />
-                        <p className={styles.letrinhas}>NÃO OBRIGATÓRIO</p> <br />
+                        <p className={styles.letrinhas}>CAMPO NÃO OBRIGATÓRIO</p> <br />
                         </label><br/>
 
                         <label className={styles.label}> Bairro: <br />
@@ -308,10 +362,18 @@ const Cadastro = () => {
                                 placeholder="xxx.xxx.xxx-xx" 
                                 value={cpf}
                                 onChange={(e) => setCpf(e.target.value)} 
+                                onBlur={async () => {
+                                    const cpfSemFormatacao = cpf.replace(/\D/g, '');
+                                    const isValid = await validateCPF(cpfSemFormatacao);
+                                    if (!isValid) {
+                                        setCpf('');
+                                    }
+}}
                                 required  
                                 className={styles.inputField}
                             />
                         </label><br/>
+
 
                         <label className={styles.label}>CNH: <br />
                             <InputMask 
@@ -342,6 +404,7 @@ const Cadastro = () => {
 
                     {carros.map((carro, index) => (
                         <fieldset className={styles.fieldset} key={index}>
+                            <legend className={styles.legenda}>Dados dos Automóveis</legend>
                             <CarroForm
                                 index={index}
                                 carro={carro}

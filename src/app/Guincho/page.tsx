@@ -35,7 +35,7 @@ const Guincho: React.FC = () => {
   const [localizacaoObtida, setLocalizacaoObtida] = useState<boolean>(false); 
 
   const obterLocalizacao = () => {
-    if (navigator.geolocation) {
+    if (typeof window !== "undefined" && navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
           const latitude = position.coords.latitude;
@@ -43,7 +43,7 @@ const Guincho: React.FC = () => {
 
           setLocalizacao({ latitude, longitude });
           setErro(null);
-          setLocalizacaoObtida(true); 
+          setLocalizacaoObtida(true);
 
           fetch(`https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`)
             .then(response => response.json())
@@ -53,7 +53,6 @@ const Guincho: React.FC = () => {
               if (road) {
                 setEndereco(`${road || ''}, ${suburb || ''}, ${city || ''}, ${state || ''}, ${postcode || ''}`);
               } else if (postcode) {
-                // Se não retornar o nome da rua, usar o CEP para buscar no ViaCEP
                 fetch(`https://viacep.com.br/ws/${postcode}/json/`)
                   .then(response => response.json())
                   .then(dataViaCEP => {
@@ -79,6 +78,7 @@ const Guincho: React.FC = () => {
       setErro('Geolocalização não é suportada pelo navegador.');
     }
   };
+
 
   return (
     <div className={styles.container}>

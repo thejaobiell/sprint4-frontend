@@ -1,4 +1,4 @@
-.letrinhas{
+.letrinhas {
     font-size: 15px;
 }
 
@@ -142,9 +142,10 @@
 }
 
 @media (min-width: 1200px) {
-    .label{
+    .label {
         font-size: 1.2rem;
     }
+
     .forms {
         padding: 25px;
     }

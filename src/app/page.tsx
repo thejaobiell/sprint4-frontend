@@ -1,4 +1,4 @@
-'use client';
+'use client'
 import { useEffect } from 'react';
 import styles from './Menu/Menu.module.css';
 import Link from 'next/link'; 

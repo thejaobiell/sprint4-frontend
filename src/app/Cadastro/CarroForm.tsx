@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
+import InputMask from 'react-input-mask';
 import styles from "./Cadastro.module.css";
 
 interface CarroFormProps {
@@ -10,24 +11,54 @@ interface CarroFormProps {
 }
 
 const CarroForm: React.FC<CarroFormProps> = ({ index, carro, handleInputChange, removerCarro, carros }) => {
+    const [placaTipo, setPlacaTipo] = useState<'mercosul' | 'brasileira'>('brasileira');
+
     const handleUppercaseInput = (e: React.ChangeEvent<HTMLInputElement>) => {
         e.target.value = e.target.value.toUpperCase();
         handleInputChange(index, e);
     };
 
+    const handlePlacaTipoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setPlacaTipo(e.target.value as 'mercosul' | 'brasileira');
+    };
+
+    const handleAnoInput = (e: React.FormEvent<HTMLInputElement>) => {
+        const target = e.target as HTMLInputElement;
+        const input = target.value.replace(/[^0-9]/g, '');
+        target.value = input.slice(0, 4);
+    };
+
     return (
         <fieldset className={styles.formGroup}>
-            <legend className={styles.legenda}>Informações do Carro {index + 1}</legend>
+            <legend className={styles.legenda}>Carro {index + 1}</legend>
+
+            <label className={styles.label}>
+                Tipo de Placa: <br />
+                <input
+                    type="radio"
+                    name={`placaTipo-${index}`}
+                    value="brasileira"
+                    checked={placaTipo === 'brasileira'}
+                    onChange={handlePlacaTipoChange}
+                /> Brasileira
+                <input
+                    type="radio"
+                    name={`placaTipo-${index}`}
+                    value="mercosul"
+                    checked={placaTipo === 'mercosul'}
+                    onChange={handlePlacaTipoChange}
+                /> Mercosul
+            </label> <br/>
 
             <label className={styles.label}>
                 Placa: <br />
-                <input
+                <InputMask
                     type="text"
                     name="placa"
                     value={carro.placa}
                     onChange={handleUppercaseInput}
-                    placeholder="Digite a placa"
-                    maxLength={7}
+                    mask={placaTipo === 'mercosul' ? 'aaa9a99' : 'aaa9999'}
+                    placeholder="Digite sua placa"
                     required
                     className={styles.inputField}
                 />
@@ -93,6 +124,7 @@ const CarroForm: React.FC<CarroFormProps> = ({ index, carro, handleInputChange, 
                     name="ano"
                     value={carro.ano}
                     onChange={(e) => handleInputChange(index, e)}
+                    onInput={handleAnoInput}
                     placeholder="Digite o ano"
                     required
                     className={styles.inputField}
@@ -100,6 +132,8 @@ const CarroForm: React.FC<CarroFormProps> = ({ index, carro, handleInputChange, 
                     max="2025"
                 />
             </label> <br/>
+
+
 
             {carros.length > 1 && (
                 <button

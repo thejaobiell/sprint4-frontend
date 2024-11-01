@@ -1,5 +1,5 @@
 'use client'
-import { useNavigate } from 'react-router-dom';
+import Link from 'next/link';
 import styles from './ObrigadoPorUsar.module.css';
 import { useEffect } from 'react';
 
@@ -13,18 +13,15 @@ const ObrigadoPorUsar = () => {
         document.head.appendChild(link);
     }, []);
 
-    const navigate = useNavigate();
-
-    const voltarMenu = () => {
-        navigate('/menu');
-    };
-
     return (
         <div className={styles.thanks}>
-            <h1 className={styles.titulo}>Obrigado por usar a DIAGNOSCAR!</h1>
-            <button className={styles.botao} onClick={voltarMenu}>
-                Voltar ao Menu
-            </button>
+            <h1 className={styles.titulo}>Obrigado por usar a DiagnosCAR!</h1>
+            <Link href="/Dashboard"> 
+                <button className={styles.botao}>
+                    Voltar ao Menu
+                </button>
+            </Link>
+
         </div>
     );
 };

@@ -155,4 +155,3 @@ const PreDiagnostico = () => {
 };
 
 export default PreDiagnostico;
-
