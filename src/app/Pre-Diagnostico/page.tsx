@@ -34,20 +34,30 @@ const PreDiagnostico = () => {
   }, []);
 
   useEffect(() => {
-    const handleResize = () => {
+    if (typeof window !== "undefined") {
       setMostrarChat(window.innerWidth >= 1200);
-    };
-    handleResize();
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+      const handleResize = () => {
+        setMostrarChat(window.innerWidth >= 1200);
+      };
+      window.addEventListener('resize', handleResize);
+      return () => window.removeEventListener('resize', handleResize);
+    }
   }, []);
+
+  useEffect(() => {
+    if (mostrarChat && mensagensChat.length === 0) {
+      const userInfo = JSON.parse(sessionStorage.getItem('user') || '{}');
+      const carroSelecionadoStored = localStorage.getItem('carroSelecionado');
+      setMensagensChat([{ texto: `Olá ${userInfo.nome}, digite o problema do seu ${carroSelecionadoStored ? JSON.parse(carroSelecionadoStored).modelo : 'carro'}`, tipo: 'bot' }]);
+    }
+  }, [mostrarChat]);
 
   const chamarGuincho = () => {
     router.push('/Guincho');
   };
 
   const oficinasParceiras = () => {
-    router.push('/OficinasPerto');
+    router.push('/Oficinas');
   };
 
   const enviarMensagem = () => {
@@ -60,17 +70,15 @@ const PreDiagnostico = () => {
     }
   };
 
-    const TrocarCarro = () => {
+  const TrocarCarro = () => {
     setCarroSelecionado(null);
     router.push('/Dashboard');
   };
 
-
-
   return (
     <>
-      <div className={styles.informacoes}>
-        <h2>Informações: </h2>
+      <div className={`${styles.informacoes} ${mostrarChat ? styles.chatAberto : ''}`}>
+          <h2>Informações: </h2>
         {carroSelecionado ? (
           <>
             <h4>Marca: {carroSelecionado.marca}</h4>
@@ -81,7 +89,7 @@ const PreDiagnostico = () => {
         ) : (
           <p>Nenhum carro selecionado.</p>
         )}
-        <button className={styles.TrocarCarro}  onClick={TrocarCarro}>Trocar de Carro</button>
+        <button className={styles.TrocarCarro} onClick={TrocarCarro}>Trocar de Carro</button>
       </div>
 
       <div className={styles.descricao}>
@@ -103,9 +111,9 @@ const PreDiagnostico = () => {
         </button>
       </div>
 
-      {window.innerWidth < 1200 && (
+      {typeof window !== "undefined" && window.innerWidth < 1200 && (
         <div className={styles.solobotao}>
-          <button className={styles.botao} onClick={() => setMostrarChat(!mostrarChat)}>
+          <button className={`${styles.botao} ${styles.chatbotao}`} onClick={() => setMostrarChat(!mostrarChat)}>
             Chat
           </button>
         </div>
@@ -113,7 +121,7 @@ const PreDiagnostico = () => {
 
       {mostrarChat && (
         <div className={styles.chatContainer}>
-          {window.innerWidth < 1200 && (
+          {typeof window !== "undefined" && window.innerWidth < 1200 && (
             <button className={styles.fecharChat} onClick={() => setMostrarChat(false)}>
               Fechar
             </button>
