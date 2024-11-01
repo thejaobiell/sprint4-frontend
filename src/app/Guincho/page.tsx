@@ -1,4 +1,4 @@
-'use client'
+'use client';
 import React, { useEffect, useState } from 'react';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
@@ -17,22 +17,23 @@ const iconePadrao = L.icon({
 });
 
 const Guincho: React.FC = () => {
-  useEffect(() => {
-    document.title = "Chamando Guincho - DiagnosCAR";
-    const link = document.createElement('link');
-    link.rel = 'icon';
-    link.href = '/img/Logos/Diagnoscar.ico';
-    document.head.appendChild(link);
-  }, []);
-
   const [localizacao, setLocalizacao] = useState<{ latitude: number | null; longitude: number | null }>({
     latitude: null,
     longitude: null,
   });
-
   const [endereco, setEndereco] = useState<string | null>(null);
   const [erro, setErro] = useState<string | null>(null);
-  const [localizacaoObtida, setLocalizacaoObtida] = useState<boolean>(false); 
+  const [localizacaoObtida, setLocalizacaoObtida] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      document.title = "Chamando Guincho - DiagnosCAR";
+      const link = document.createElement('link');
+      link.rel = 'icon';
+      link.href = '/img/Logos/Diagnoscar.ico';
+      document.head.appendChild(link);
+    }
+  }, []);
 
   const obterLocalizacao = () => {
     if (typeof window !== "undefined" && navigator.geolocation) {
@@ -78,7 +79,6 @@ const Guincho: React.FC = () => {
       setErro('Geolocalização não é suportada pelo navegador.');
     }
   };
-
 
   return (
     <div className={styles.container}>
