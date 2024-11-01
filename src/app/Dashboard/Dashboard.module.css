@@ -1,3 +1,9 @@
+.letrinhas{
+    font-size: small;
+    padding: 0px;
+    margin: 0px;
+}
+
 .logoutButton {
     width: 100%;
     max-width: 200px;
