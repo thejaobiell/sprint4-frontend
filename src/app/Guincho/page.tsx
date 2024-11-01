@@ -18,13 +18,11 @@ const iconePadrao = L.icon({
 
 const Guincho: React.FC = () => {
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      document.title = "Chamando Guincho - DiagnosCAR";
-      const link = document.createElement('link');
-      link.rel = 'icon';
-      link.href = '/img/Logos/Diagnoscar.ico';
-      document.head.appendChild(link);
-    }
+    document.title = "Chamando Guincho - DiagnosCAR";
+    const link = document.createElement('link');
+    link.rel = 'icon';
+    link.href = '/img/Logos/Diagnoscar.ico';
+    document.head.appendChild(link);
   }, []);
 
   const [localizacao, setLocalizacao] = useState<{ latitude: number | null; longitude: number | null }>({
@@ -37,7 +35,7 @@ const Guincho: React.FC = () => {
   const [localizacaoObtida, setLocalizacaoObtida] = useState<boolean>(false); 
 
   const obterLocalizacao = () => {
-    if (typeof window !== "undefined" && navigator.geolocation) {
+    if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
           const latitude = position.coords.latitude;
@@ -45,7 +43,7 @@ const Guincho: React.FC = () => {
 
           setLocalizacao({ latitude, longitude });
           setErro(null);
-          setLocalizacaoObtida(true);
+          setLocalizacaoObtida(true); 
 
           fetch(`https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`)
             .then(response => response.json())
@@ -55,6 +53,7 @@ const Guincho: React.FC = () => {
               if (road) {
                 setEndereco(`${road || ''}, ${suburb || ''}, ${city || ''}, ${state || ''}, ${postcode || ''}`);
               } else if (postcode) {
+                // Se não retornar o nome da rua, usar o CEP para buscar no ViaCEP
                 fetch(`https://viacep.com.br/ws/${postcode}/json/`)
                   .then(response => response.json())
                   .then(dataViaCEP => {
