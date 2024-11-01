@@ -41,7 +41,9 @@ const Dashboard = () => {
   const [estaEditando, setEstaEditando] = useState(false);
   const [cep, setCep] = useState('');
   const [senha, setSenha] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
+  const [confirmarSenha, setConfirmarSenha] = useState('');
+  const [MostrarSenha, setMostrarSenha] = useState(false);
+  const [MostrarSenha2, setMostrarSenha2] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -122,17 +124,26 @@ const Dashboard = () => {
     }
   };
 
-  const togglePasswordVisibility = () => {
-    setShowPassword(prev => !prev);
+  const VisibilidadeSenha = () => {
+    setMostrarSenha(prev => !prev);
+  };
+  const VisibilidadeSenha2 = () => {
+    setMostrarSenha2(prev => !prev);
   };
 
   const salvarEdicao = () => {
+    if (senha !== confirmarSenha) { 
+      alert('As senhas não coincidem!\nTente Novamente!');
+      return;
+    }
+
     if (userData) {
-      localStorage.setItem('user', JSON.stringify({ ...userData, senha })); 
+      sessionStorage.setItem('user', JSON.stringify({ ...userData, senha })); 
       alert('Informações salvas com sucesso!');
       setEstaEditando(false);
     }
   };
+
 
   const lidarEdicao = () => {
     setEstaEditando(true);
@@ -169,6 +180,7 @@ const Dashboard = () => {
                       value={userData.nome || ''}
                       onChange={lidarMudancas}
                       className={styles.inputField}
+                      placeholder='Digite seu NOME (NÃO DEIXE VAZIO)'
                     />
                   </label><br/>
 
@@ -179,6 +191,7 @@ const Dashboard = () => {
                       value={userData.sobrenome || ''}
                       onChange={lidarMudancas}
                       className={styles.inputField}
+                      placeholder='Digite seu SOBRENOME (NÃO DEIXE VAZIO)'
                     />
                   </label><br/>
 
@@ -214,16 +227,17 @@ const Dashboard = () => {
                       value={userData.email || ''}
                       onChange={lidarMudancas}
                       className={styles.inputField}
+                      placeholder='Digite seu EMAIL (NÃO DEIXE VAZIO)'
                     />
                   </label><br/>
 
                   <label>Senha: <br />
                     <div className={styles.passwordWrapper}>
                       <input 
-                        type={showPassword ? 'text' : 'password'}
+                        type={MostrarSenha ? 'text' : 'password'}
                         name="senha" 
                         id="senha" 
-                        placeholder="Digite uma senha"
+                        placeholder="Digite a SENHA"
                         value={senha}
                         onChange={(e) => setSenha(e.target.value)} 
                         required  
@@ -231,14 +245,34 @@ const Dashboard = () => {
                       />
                       <button 
                         type="button" 
-                        onClick={togglePasswordVisibility}
+                        onClick={VisibilidadeSenha}
                         className={styles.toggleButton}
                       >
-                        {showPassword ? '👁️' : '🙈'}
+                        {MostrarSenha ? '👁️' : '🙈'}
                       </button>
                     </div>
                   </label>
-
+                  <label>Confirmar Senha: <br />
+                    <div className={styles.passwordWrapper}>
+                      <input 
+                        type={MostrarSenha2 ? 'text' : 'password'}
+                        name="confirmarSenha" 
+                        id="confirmarSenha" 
+                        placeholder="Confirme a SENHA"
+                        value={confirmarSenha}
+                        onChange={(e) => setConfirmarSenha(e.target.value)} 
+                        required  
+                        className={styles.inputField}
+                      />
+                      <button 
+                        type="button" 
+                        onClick={VisibilidadeSenha2}
+                        className={styles.toggleButton}
+                      >
+                        {MostrarSenha2 ? '👁️' : '🙈'}
+                      </button>
+                    </div>
+                  </label><br/>
 
                   <label>CPF: <br/>
                     <input
@@ -299,16 +333,18 @@ const Dashboard = () => {
                       value={userData.endereco.numeroResidencial || ''}
                       onChange={lidarMudancas}
                       className={styles.inputField}
+                      placeholder='Digite seu NÚMERO RESIDENCIAL'
                     />
                   </label><br/>
 
-                  <label>Complemento: <br/>
+                  <label>Complemento:<p className={styles.letrinhas}>Campo não Obrigatório</p> <br/>
                     <input
                       type="text"
                       name="complemento"
                       value={userData.endereco.complemento || ''}
                       onChange={lidarMudancas}
                       className={styles.inputField}
+                      placeholder='Digite um COMPLEMENTO '
                     />
                   </label><br/>
 
