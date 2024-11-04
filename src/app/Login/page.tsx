@@ -12,37 +12,45 @@ const Login = () => {
     const [MostrarSenha, setMostrarSenha] = useState(false);
     const router = useRouter(); 
 
-    const handleLogin = (e: React.FormEvent) => {
-        e.preventDefault(); 
-
-        const user = sessionStorage.getItem('user');
-        if (user) {
-            const analiseUser = JSON.parse(user);
-
-            if (analiseUser.email === email && analiseUser.senha === senha) {
-                sessionStorage.setItem('logado', 'sim');
-                router.push('/Dashboard');
-            } else {
-                setError('Email ou senha incorretos');
-            }
-            
-        } else {
-            setError('Usuário não encontrado. Faça o cadastro primeiro.'); 
-        }
-    }
-
     useEffect(() => {
         document.title = "Login - DiagnosCAR";
         const link = document.createElement('link');
         link.rel = 'icon';
         link.href = '/img/Logos/Diagnoscar.ico';
         document.head.appendChild(link);
+        return () => {
+            document.head.removeChild(link);
+        };
     }, []);
+
+    useEffect(() => {
+        const logado = sessionStorage.getItem('logado');
+        if (logado === 'sim') {
+            router.push('/Dashboard');
+        }
+    }, [router]);
+
+    const handleLogin = (e: React.FormEvent) => {
+        e.preventDefault(); 
+
+        const cliente = sessionStorage.getItem('cliente');
+        if (cliente) {
+            const clienteData = JSON.parse(cliente);
+
+            if (clienteData.emailCliente === email && clienteData.senhaCliente === senha) {
+                sessionStorage.setItem('logado', 'sim');
+                router.push('/Dashboard');
+            } else {
+                setError('Email ou senha incorretos');
+            }
+        } else {
+            setError('Usuário não encontrado. Faça o cadastro primeiro.'); 
+        }
+    }
 
     const mudarVisibilidadeSenha = () => {
         setMostrarSenha(!MostrarSenha);
     };
-
 
     return (
         <section className={styles.section}>
@@ -53,12 +61,13 @@ const Login = () => {
                     <label htmlFor="txtEmail">
                         <h1>Email:</h1>
                         <input 
-                        type="email" 
+                            type="email" 
                             name="txtEmail" 
                             placeholder="Digite seu email"
                             value={email}
-                            onChange= {(e) => setEmail(e.target.value)} 
-                        required />
+                            onChange={(e) => setEmail(e.target.value)} 
+                            required 
+                        />
                     </label>
                     <br />
 
@@ -87,7 +96,7 @@ const Login = () => {
 
                     {error && <p style={{ color: 'red' }}>{error}</p>} 
 
-                    <Link href="/Cadastro">
+                    <Link href="/Cadastro" className={styles.criar}>
                         <h1>Criar um cadastro</h1>
                     </Link>
                     <button type="submit" className={styles.button}>Entrar</button>

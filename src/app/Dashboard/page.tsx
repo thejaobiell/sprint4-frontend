@@ -22,28 +22,25 @@ interface Endereco {
 }
 
 interface UserData {
-  nome: string;
-  sobrenome: string;
-  dataNasc: string;
-  genero: string;
-  email: string;
-  cpf: string;
-  cnh: string;
-  rg: string;
-  senha: string; 
-  endereco: Endereco; 
-  carros: Carro[];
+  nomeCliente: string;
+  sobrenomeCliente: string;
+  dataNascCliente: string;
+  telefoneCliente: string;
+  emailCliente: string;
+  cpfCliente: string;
+  cnhCliente: string;
+  rgCliente: string;
+  senhaCliente: string; 
+  enderecoCliente: Endereco; 
 }
 
 const Dashboard = () => {
   const [carros, setCarros] = useState<Carro[]>([]);
   const [userData, setUserData] = useState<UserData | null>(null);
   const [estaEditando, setEstaEditando] = useState(false);
-  const [cep, setCep] = useState('');
-  const [senha, setSenha] = useState('');
-  const [confirmarSenha, setConfirmarSenha] = useState('');
-  const [MostrarSenha, setMostrarSenha] = useState(false);
-  const [MostrarSenha2, setMostrarSenha2] = useState(false);
+  const [senhaAtual, setSenhaAtual] = useState('');
+  const [novaSenha, setNovaSenha] = useState('');
+  const [confirmarNovaSenha, setConfirmarNovaSenha] = useState('');
   const router = useRouter();
 
   useEffect(() => {
@@ -52,7 +49,7 @@ const Dashboard = () => {
     link.rel = 'icon';
     link.href = '/img/Logos/Diagnoscar.ico';
     document.head.appendChild(link);
-  }, [])
+  }, []);
 
   useEffect(() => {
     const logado = sessionStorage.getItem('logado');
@@ -60,12 +57,35 @@ const Dashboard = () => {
       router.push('/Login');
     }
 
-    const dataUserArmazenados = sessionStorage.getItem('user');
-    if (dataUserArmazenados) {
-      const dataAnalisado: UserData = JSON.parse(dataUserArmazenados);
-      setCarros(dataAnalisado.carros);
-      setUserData(dataAnalisado);
-      setSenha(dataAnalisado.senha || ''); 
+    const clienteData = sessionStorage.getItem('cliente');
+    const carrosData = sessionStorage.getItem('carros');
+
+    if (clienteData && carrosData) {
+      const cliente = JSON.parse(clienteData);
+      const carrosArray = JSON.parse(carrosData);
+      
+      setUserData({
+        nomeCliente: cliente.nomeCliente,
+        sobrenomeCliente: cliente.sobrenomeCliente,
+        dataNascCliente: cliente.dataNascCliente,
+        telefoneCliente: cliente.telefoneCliente,
+        emailCliente: cliente.emailCliente,
+        cpfCliente: cliente.cpfCliente,
+        cnhCliente: cliente.cnhCliente,
+        rgCliente: cliente.rgCliente,
+        senhaCliente: cliente.senhaCliente,
+        enderecoCliente: {
+          rua: cliente.enderecoCliente.split(', ')[0],
+          numeroResidencial: cliente.enderecoCliente.split(', ')[1],
+          complemento: cliente.enderecoCliente.split(', ')[2],
+          bairro: cliente.enderecoCliente.split(', ')[3],
+          cidade: cliente.enderecoCliente.split(', ')[4],
+          estado: cliente.enderecoCliente.split(', ')[5],
+          cep: cliente.enderecoCliente.split(', ')[6],
+        },
+      });
+
+      setCarros(carrosArray);
     }
   }, [router]);
 
@@ -82,68 +102,53 @@ const Dashboard = () => {
     router.push('/Login');
   };
 
-  const lidarMudancas = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value } = e.target;
-    if (userData) {
-      setUserData((prevData) => ({
-        ...prevData!,
-        [name]: value,
-        endereco: {
-          ...prevData!.endereco,
-          [name]: value,
-        },
-      }));
+  const bloquearEdicao = (e: React.FocusEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const campoEditavel = e.target.name === 'email' || e.target.name === 'senha';
+    if (!campoEditavel) {
+      alert("Este campo não pode ser editado. Por favor, entre em contato com o suporte.");
+      e.target.blur();
     }
-  };
-
-  const buscaCep = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const CepUser = e.target.value.replace(/\D/g, '');
-    setCep(CepUser);
-
-    if (CepUser.length === 8) {
-      try {
-        const response = await fetch(`https://viacep.com.br/ws/${CepUser}/json/`);
-        const dadosCEP = await response.json();
-
-        if (!dadosCEP.erro) {
-          setUserData((prevData) => ({
-            ...prevData!,
-            endereco: {
-              ...prevData!.endereco,
-              rua: dadosCEP.logradouro,
-              bairro: dadosCEP.bairro,
-              cidade: dadosCEP.localidade,
-              estado: dadosCEP.uf,
-              cep: CepUser,
-            },
-          }));
-        }
-      } catch (error) {
-        console.error("Erro ao buscar o CEP:", error);
-      }
-    }
-  };
-
-  const VisibilidadeSenha = () => {
-    setMostrarSenha(prev => !prev);
-  };
-  const VisibilidadeSenha2 = () => {
-    setMostrarSenha2(prev => !prev);
   };
 
   const salvarEdicao = () => {
-    if (senha !== confirmarSenha) { 
-      alert('As senhas não coincidem!\nTente Novamente!');
+    if (senhaAtual !== userData?.senhaCliente) {
+      alert('Senha atual incorreta. Por favor, insira a senha correta para confirmar as alterações.');
       return;
     }
 
+    if (novaSenha && confirmarNovaSenha) {
+      if (novaSenha !== confirmarNovaSenha) {
+        alert('As novas senhas não coincidem. Tente novamente.');
+        return;
+      }
+    }
+
     if (userData) {
-      sessionStorage.setItem('user', JSON.stringify({ ...userData, senha })); 
+      const senhaAtualizada = novaSenha && confirmarNovaSenha ? novaSenha : userData.senhaCliente;
+
+      // Mantendo a estrutura original ao salvar no sessionStorage
+      const clienteParaSalvar = {
+        cpfCliente: userData.cpfCliente,
+        cnhCliente: userData.cnhCliente,
+        rgCliente: userData.rgCliente,
+        nomeCliente: userData.nomeCliente,
+        sobrenomeCliente: userData.sobrenomeCliente,
+        dataNascCliente: userData.dataNascCliente,
+        emailCliente: userData.emailCliente,
+        senhaCliente: senhaAtualizada,
+        telefoneCliente: userData.telefoneCliente,
+        enderecoCliente: `${userData.enderecoCliente.rua}, ${userData.enderecoCliente.numeroResidencial}, ${userData.enderecoCliente.complemento}, ${userData.enderecoCliente.bairro}, ${userData.enderecoCliente.cidade}, ${userData.enderecoCliente.estado}, ${userData.enderecoCliente.cep}`
+      };
+
+      sessionStorage.setItem('cliente', JSON.stringify(clienteParaSalvar));
+
       alert('Informações salvas com sucesso!');
       setEstaEditando(false);
+      setSenhaAtual('');
+      setNovaSenha('');
+      setConfirmarNovaSenha('');
     }
   };
-
 
   const lidarEdicao = () => {
     setEstaEditando(true);
@@ -151,17 +156,14 @@ const Dashboard = () => {
 
   const cancelarEdicao = () => {
     setEstaEditando(false);
-    const dataUserArmazenados = localStorage.getItem('user');
+    const dataUserArmazenados = sessionStorage.getItem('cliente');
     if (dataUserArmazenados) {
       const data = JSON.parse(dataUserArmazenados);
       setUserData(data);
-      setSenha(data.senha || ''); 
+      setSenhaAtual('');
+      setNovaSenha('');
+      setConfirmarNovaSenha('');
     }
-  };
-
-  const handleCepChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    buscaCep(e);
-    lidarMudancas(e);
   };
 
   return (
@@ -177,10 +179,10 @@ const Dashboard = () => {
                     <input
                       type="text"
                       name="nome"
-                      value={userData.nome || ''}
-                      onChange={lidarMudancas}
+                      value={userData.nomeCliente || ''}
+                      readOnly
+                      onFocus={bloquearEdicao}
                       className={styles.inputField}
-                      placeholder='Digite seu NOME (NÃO DEIXE VAZIO)'
                     />
                   </label><br/>
 
@@ -188,10 +190,10 @@ const Dashboard = () => {
                     <input
                       type="text"
                       name="sobrenome"
-                      value={userData.sobrenome || ''}
-                      onChange={lidarMudancas}
+                      value={userData.sobrenomeCliente || ''}
+                      readOnly
+                      onFocus={bloquearEdicao}
                       className={styles.inputField}
-                      placeholder='Digite seu SOBRENOME (NÃO DEIXE VAZIO)'
                     />
                   </label><br/>
 
@@ -199,185 +201,62 @@ const Dashboard = () => {
                     <input
                       type="date"
                       name="dataNasc"
-                      value={userData.dataNasc || ''}
-                      onChange={lidarMudancas}
+                      value={userData.dataNascCliente || ''}
+                      readOnly
+                      onFocus={bloquearEdicao}
                       className={styles.inputField}
                     />
                   </label><br/>
 
-                  <label>Gênero: <br/> 
-                    <select
-                      name="genero"
-                      value={userData.genero || ''}
-                      onChange={lidarMudancas}
+                  <label>Telefone: <br/>
+                    <InputMask
+                      mask="(99) 99999-9999"
+                      type="text"
+                      name="telefone"
+                      value={userData.telefoneCliente || ''}
+                      readOnly
+                      onFocus={bloquearEdicao}
                       className={styles.inputField}
-                    >
-                      <option value="" disabled>Selecione...</option>
-                      <option value="M">Masculino</option>
-                      <option value="F">Feminino</option>
-                      <option value="O">Outro</option>
-                      <option value="ND">Prefiro não dizer</option>
-                    </select>
+                    />
                   </label><br/>
 
                   <label>Email: <br/>
                     <input
                       type="email"
                       name="email"
-                      value={userData.email || ''}
-                      onChange={lidarMudancas}
-                      className={styles.inputField}
-                      placeholder='Digite seu EMAIL (NÃO DEIXE VAZIO)'
-                    />
-                  </label><br/>
-
-                  <label>Senha: <br />
-                    <div className={styles.passwordWrapper}>
-                      <input 
-                        type={MostrarSenha ? 'text' : 'password'}
-                        name="senha" 
-                        id="senha" 
-                        placeholder="Digite a SENHA"
-                        value={senha}
-                        onChange={(e) => setSenha(e.target.value)} 
-                        required  
-                        className={styles.inputField}
-                      />
-                      <button 
-                        type="button" 
-                        onClick={VisibilidadeSenha}
-                        className={styles.toggleButton}
-                      >
-                        {MostrarSenha ? '👁️' : '🙈'}
-                      </button>
-                    </div>
-                  </label>
-                  <label>Confirmar Senha: <br />
-                    <div className={styles.passwordWrapper}>
-                      <input 
-                        type={MostrarSenha2 ? 'text' : 'password'}
-                        name="confirmarSenha" 
-                        id="confirmarSenha" 
-                        placeholder="Confirme a SENHA"
-                        value={confirmarSenha}
-                        onChange={(e) => setConfirmarSenha(e.target.value)} 
-                        required  
-                        className={styles.inputField}
-                      />
-                      <button 
-                        type="button" 
-                        onClick={VisibilidadeSenha2}
-                        className={styles.toggleButton}
-                      >
-                        {MostrarSenha2 ? '👁️' : '🙈'}
-                      </button>
-                    </div>
-                  </label><br/>
-
-                  <label>CPF: <br/>
-                    <input
-                      type="text"
-                      name="cpf"
-                      value={userData.cpf || ''}
-                      readOnly
+                      value={userData.emailCliente || ''}
+                      onChange={(e) => setUserData({ ...userData!, emailCliente: e.target.value })}
                       className={styles.inputField}
                     />
                   </label><br/>
 
-                  <label>CNH: <br/> 
-                    <input
-                      type="text"
-                      name="cnh"
-                      value={userData.cnh || ''}
-                      readOnly
+                  <label>Senha Atual: <br />
+                    <input 
+                      type="password"
+                      name="senhaAtual"
+                      value={senhaAtual}
+                      onChange={(e) => setSenhaAtual(e.target.value)}
                       className={styles.inputField}
                     />
                   </label><br/>
 
-                  <label>RG: <br/>                                                 
-                    <input
-                      type="text"
-                      name="rg"
-                      value={userData.rg || ''}
-                      readOnly
+                  <label>Nova Senha: <br />
+                    <input 
+                      type="password"
+                      name="novaSenha"
+                      value={novaSenha}
+                      onChange={(e) => setNovaSenha(e.target.value)}
                       className={styles.inputField}
                     />
                   </label><br/>
 
-                  <label>CEP: <br/>
-                    <InputMask
-                      mask="99999-999"
-                      type="text"
-                      name="cep"
-                      value={userData.endereco.cep || ''}
-                      onChange={handleCepChange}
+                  <label>Confirmar Nova Senha: <br />
+                    <input 
+                      type="password"
+                      name="confirmarNovaSenha"
+                      value={confirmarNovaSenha}
+                      onChange={(e) => setConfirmarNovaSenha(e.target.value)}
                       className={styles.inputField}
-                    />
-                  </label><br/>
-
-                  <label>Rua: <br/>
-                    <input
-                      type="text"
-                      name="rua"
-                      value={userData.endereco.rua || ''}
-                      onChange={lidarMudancas}
-                      className={styles.inputField}
-                      readOnly
-                    />
-                  </label><br/>
-
-                  <label>Número: <br/>
-                    <input
-                      type="number"
-                      name="numeroResidencial"
-                      value={userData.endereco.numeroResidencial || ''}
-                      onChange={lidarMudancas}
-                      className={styles.inputField}
-                      placeholder='Digite seu NÚMERO RESIDENCIAL'
-                    />
-                  </label><br/>
-
-                  <label>Complemento:<p className={styles.letrinhas}>Campo não Obrigatório</p> <br/>
-                    <input
-                      type="text"
-                      name="complemento"
-                      value={userData.endereco.complemento || ''}
-                      onChange={lidarMudancas}
-                      className={styles.inputField}
-                      placeholder='Digite um COMPLEMENTO '
-                    />
-                  </label><br/>
-
-                  <label>Bairro: <br/>
-                    <input
-                      type="text"
-                      name="bairro"
-                      value={userData.endereco.bairro || ''}
-                      onChange={lidarMudancas}
-                      className={styles.inputField}
-                      readOnly
-                    />
-                  </label><br/>
-
-                  <label>Cidade: <br/>
-                    <input
-                      type="text"
-                      name="cidade"
-                      value={userData.endereco.cidade || ''}
-                      onChange={lidarMudancas}
-                      className={styles.inputField}
-                      readOnly
-                    />
-                  </label><br/>
-
-                  <label>Estado: <br/>
-                    <input
-                      type="text"
-                      name="estado"
-                      value={userData.endereco.estado || ''}
-                      onChange={lidarMudancas}
-                      className={styles.inputField}
-                      readOnly
                     />
                   </label><br/>
 
@@ -391,31 +270,22 @@ const Dashboard = () => {
                 </>
               )
             ) : (
-              userData && (
-                <>
-                  <p>Nome: {userData.nome}</p>
-                  <p>Sobrenome: {userData.sobrenome}</p>
-                  <p>Data de Nascimento: {userData.dataNasc}</p>
-                  <p>Gênero: {userData.genero}</p>
-                  <p>Email: {userData.email}</p>
-                  <p>Senha: {"*".repeat(userData.senha.length)}</p>
-                  <p>CPF: {userData.cpf}</p>
-                  <p>CNH: {userData.cnh}</p>
-                  <p>RG: {userData.rg}</p>
-
-                  <p>CEP: {userData.endereco.cep}</p>
-                  <p>Rua: {userData.endereco.rua}</p>
-                  <p>Número: {userData.endereco.numeroResidencial}</p>
-                  <p>Complemento: {userData.endereco.complemento}</p>
-                  <p>Bairro: {userData.endereco.bairro}</p>
-                  <p>Cidade: {userData.endereco.cidade}</p>
-                  <p>Estado: {userData.endereco.estado}</p>
-
-                  <button onClick={lidarEdicao} className={`${styles.botao} ${styles.editButton}`}>
-                    Editar
-                  </button>
-                </>
-              )
+            userData && (
+              <>
+                <p>Nome: {userData.nomeCliente}</p>
+                <p>Sobrenome: {userData.sobrenomeCliente}</p>
+                <p>Data de Nascimento: {userData.dataNascCliente}</p>
+                <p>Telefone: {userData.telefoneCliente}</p>
+                <p>Email: {userData.emailCliente}</p>
+                <p>CPF: {userData.cpfCliente}</p>
+                <p>CNH: {userData.cnhCliente}</p>
+                <p>RG: {userData.rgCliente}</p>
+                <p>Endereço: {userData.enderecoCliente.rua}, {userData.enderecoCliente.numeroResidencial}, {userData.enderecoCliente.complemento}, {userData.enderecoCliente.bairro}, {userData.enderecoCliente.cidade}, {userData.enderecoCliente.estado}, {userData.enderecoCliente.cep}</p>
+                <button onClick={lidarEdicao} className={styles.botao}>
+                  Editar
+                </button>
+              </>
+            )
             )}
           </div>
         </fieldset>

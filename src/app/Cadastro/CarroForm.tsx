@@ -4,13 +4,18 @@ import styles from "./Cadastro.module.css";
 
 interface CarroFormProps {
     index: number;
-    carro: { placa: string; marca: string; modelo: string; ano: string };
+    carro: {
+        placa: string;
+        marca: string;
+        modelo: string;
+        ano: string;
+    };
     handleInputChange: (index: number, e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
     removerCarro: (index: number) => void;
     carros: { placa: string; marca: string; modelo: string; ano: string }[];
 }
 
-const CarroForm: React.FC<CarroFormProps> = ({ index, carro, handleInputChange, removerCarro, carros }) => {
+const CarroForm: React.FC<CarroFormProps> = ({ index, carro, handleInputChange, removerCarro }) => {
     const [placaTipo, setPlacaTipo] = useState<'mercosul' | 'brasileira'>('brasileira');
 
     const handleUppercaseInput = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -89,13 +94,10 @@ const CarroForm: React.FC<CarroFormProps> = ({ index, carro, handleInputChange, 
                     <option value="Jeep">Jeep</option>
                     <option value="Kia">Kia</option>
                     <option value="Lamborghini">Lamborghini</option>
-                    <option value="Maserati">Maserati</option>
-                    <option value="Mercedes-Benz">Mercedes-Benz</option>
+                    <option value="Land Rover">Land Rover</option>
                     <option value="Mitsubishi">Mitsubishi</option>
                     <option value="Nissan">Nissan</option>
                     <option value="Peugeot">Peugeot</option>
-                    <option value="Porsche">Porsche</option>
-                    <option value="RAM">RAM</option>
                     <option value="Renault">Renault</option>
                     <option value="Subaru">Subaru</option>
                     <option value="Toyota">Toyota</option>
@@ -120,30 +122,18 @@ const CarroForm: React.FC<CarroFormProps> = ({ index, carro, handleInputChange, 
             <label className={styles.label}>
                 Ano: <br />
                 <input
-                    type="number"
+                    type="text"
                     name="ano"
                     value={carro.ano}
-                    onChange={(e) => handleInputChange(index, e)}
                     onInput={handleAnoInput}
+                    onChange={(e) => handleInputChange(index, e)}
                     placeholder="Digite o ano"
                     required
                     className={styles.inputField}
-                    min="1950"
-                    max="2025"
                 />
             </label> <br/>
 
-
-
-            {carros.length > 1 && (
-                <button
-                    type="button"
-                    onClick={() => removerCarro(index)}
-                    className={styles.botaoRemover}
-                >
-                    Remover Carro
-                </button>
-            )}
+            <button type="button" onClick={() => removerCarro(index)} className={styles.botaoRemover}>Remover Carro</button>
         </fieldset>
     );
 };

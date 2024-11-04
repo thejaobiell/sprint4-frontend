@@ -9,7 +9,7 @@ const Cadastro = () => {
     const [nome, setNome] = useState('');
     const [sobrenome, setSobrenome] = useState('');
     const [dataNasc, setDataNasc] = useState('');
-    const [genero, setGenero] = useState('');
+    const [telefone, setTelefone] = useState('');
     const [email, setEmail] = useState('');
     const [senha, setSenha] = useState('');
     const [confirmarSenha, setConfirmarSenha] = useState('');
@@ -31,11 +31,140 @@ const Cadastro = () => {
         document.title = "Cadastro - DiagnosCAR";
         const link = document.createElement('link');
         link.rel = 'icon';
-        link.href = '/img/portoLogo/Diagnoscar.ico';
+        link.href = '/img/Logos/Diagnoscar.ico';
         document.head.appendChild(link);
-    }, []);
+    }, [])
 
     const router = useRouter();
+
+const handleRegister = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (senha !== confirmarSenha) {
+        alert("As senhas não coincidem.");
+        return;
+    }
+
+    const cliente = {
+        cpfCliente: cpf,
+        cnhCliente: cnh,
+        rgCliente: rg,
+        nomeCliente: nome,
+        sobrenomeCliente: sobrenome,
+        dataNascCliente: dataNasc,
+        emailCliente: email,
+        senhaCliente: senha,
+        telefoneCliente: telefone,
+        enderecoCliente: `${rua}, ${numeroResidencial}, ${complemento || 'N/A'}, ${bairro}, ${cidade}, ${estado}, ${cep}`
+    };
+
+    try {
+        await createCliente(cliente);
+        
+        sessionStorage.setItem('cliente', JSON.stringify(cliente)); // Armazenar cliente no sessionStorage
+        await cadastrarCarros(cpf); // Chamar a função para cadastrar carros
+
+        sessionStorage.setItem('carros', JSON.stringify(carros)); // Armazenar os carros no sessionStorage após cadastro
+
+        router.push('/Login'); // Redirecionar após o sucesso
+    } catch (error) {
+        console.error("Erro ao cadastrar cliente:", error);
+        alert("Erro ao cadastrar cliente.");
+    }
+};
+
+    const createCliente = async (cliente: { 
+        cpfCliente: string; 
+        cnhCliente: string; 
+        rgCliente: string; 
+        nomeCliente: string; 
+        sobrenomeCliente: string; 
+        dataNascCliente: string; 
+        emailCliente: string; 
+        senhaCliente: string; 
+        telefoneCliente: string; 
+        enderecoCliente: string; 
+    }) => {
+        try {
+            const response = await fetch('http://localhost:8080/diagnoscarweb/rest/cliente', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(cliente),
+            });
+
+            const responseText = await response.text();
+
+            if (!response.ok) {
+                throw new Error(`Erro ao criar cliente: ${responseText}`);
+            }
+
+            console.log('Cliente cadastrado com sucesso:', responseText);
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
+    };
+
+    const cadastrarCarros = async (cpfCliente: string) => {
+        const carrosArray: never[] = [];
+        for (const carro of carros) {
+            const automovel = {
+                placaAutomovel: carro.placa,
+                marcaAutomovel: carro.marca,
+                modeloAutomovel: carro.modelo,
+                anoAutomovel: Number(carro.ano),
+                clienteCpfCliente: cpfCliente
+            };
+
+            try {
+                const response = await fetch('http://localhost:8080/diagnoscarweb/rest/automovel', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(automovel),
+                });
+
+                const responseText = await response.text();
+
+                if (!response.ok) {
+                    throw new Error(`Erro ao cadastrar automóvel: ${responseText}`);
+                }
+
+                console.log('Automóvel cadastrado com sucesso:', responseText);
+            } catch (error) {
+                const errorMessage = error instanceof Error ? error.message : 'Ocorreu um erro desconhecido';
+                console.error('Erro ao cadastrar automóvel:', error);
+                alert(`Erro ao cadastrar automóvel: ${errorMessage}`);
+            }
+        }
+        sessionStorage.setItem('carros', JSON.stringify(carrosArray));
+    };
+
+
+    const buscaCep = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const cepUSER = e.target.value.replace(/\D/g, '');
+        setCep(cepUSER);
+
+        if (cepUSER.length === 8) {
+            try {
+                const response = await fetch(`https://viacep.com.br/ws/${cepUSER}/json/`);
+                const dadosCEP = await response.json();
+                console.log(dadosCEP)
+
+                if (!dadosCEP.erro) {
+                    setRua(dadosCEP.logradouro);
+                    setBairro(dadosCEP.bairro);
+                    setCidade(dadosCEP.localidade);
+                    setEstado(dadosCEP.uf);
+                }
+            } catch (error) {
+                console.error("Erro ao buscar o CEP:", error);
+            }
+        }
+    };
 
     const adicionarCarro = () => {
         setCarros((prevCarros) => [...prevCarros, { placa: '', marca: '', modelo: '', ano: '' }]);
@@ -54,97 +183,12 @@ const Cadastro = () => {
         );
     };
 
-
     const VisibilidadeSenha = () => {
         setMostrarSenha(!mostrarSenha);
     };
+
     const VisibilidadeSenha2 = () => {
         setMostrarSenha2(!mostrarSenha2);
-    };
-
-    const handleRegister = (e: React.FormEvent) => {
-        e.preventDefault();
-
-        if (senha.length < 6) {
-            alert("A senha deve ter pelo menos 6 caracteres.");
-            return;
-        }
-
-        if (senha !== confirmarSenha) {
-            alert("As senhas não coincidem.");
-            return;
-        }
-
-    const endereco = {
-        rua,
-        numeroResidencial,
-        complemento,
-        bairro,
-        cidade,
-        estado,
-        cep
-    };
-
-    const user = {
-        nome,
-        sobrenome,
-        dataNasc,
-        genero,
-        email,
-        senha,
-        cpf,
-        cnh,
-        rg,
-        endereco,
-        carros
-    };
-
-        sessionStorage.setItem('user', JSON.stringify(user));
-        router.push('/Login');
-    };
-
-    const validateCPF = async (cpf : string) => {
-        const url = `https://api.invertexto.com/v1/validator?token=15954%7Ccn6MHn9gJdaEfq1vX78gt3g7PEXv8XZ7&value=${cpf}&type=cpf`;
-
-        try {
-            const response = await fetch(url);
-            const data = await response.json();
-            console.log(data)
-
-            if (data.valid) {
-                return true;
-            } else {
-                alert('CPF inválido');
-                return false;
-            }
-        } catch (error) {
-            console.error("Erro ao validar o CPF:", error);
-            alert('Erro ao validar o CPF. Por favor, tente novamente.');
-            return false;
-        }
-    };
-
-    const buscaCep = async (e: React.ChangeEvent<HTMLInputElement>) => {
-        const cepUSER = e.target.value.replace(/\D/g, '');
-        setCep(cepUSER);
-
-        if (cepUSER.length === 8) {
-            try {
-                const response = await fetch(`https://viacep.com.br/ws/${cepUSER}/json/`);
-                const dadosCEP = await response.json();
-                console.log(dadosCEP)
-
-
-                if (!dadosCEP.erro) {
-                    setRua(dadosCEP.logradouro);
-                    setBairro(dadosCEP.bairro);
-                    setCidade(dadosCEP.localidade);
-                    setEstado(dadosCEP.uf);
-                }
-            } catch (error) {
-                console.error("Erro ao buscar o CEP:", error);
-            }
-        }
     };
 
     return (
@@ -191,19 +235,17 @@ const Cadastro = () => {
                             /> 
                         </label><br />
 
-                        <label className={styles.label}>Gênero:
-                            <select 
-                                name="genero" 
-                                onChange={(e) => setGenero(e.target.value)} 
-                                required 
+                        <label className={styles.label}> Telefone Celular: <br /> 
+                            <InputMask
+                                mask="(99) 99999-9999"
+                                type="text"
+                                name="telefone"
+                                placeholder="Digite seu telefone"
+                                value={telefone}
+                                onChange={(e) => setTelefone(e.target.value)}
+                                required  
                                 className={styles.inputField}
-                            >
-                                <option value="" disabled selected>Selecione...</option>
-                                <option value="M">Masculino</option>
-                                <option value="F">Feminino</option>
-                                <option value="O">Outro</option>
-                                <option value="ND">Prefiro não dizer</option>
-                            </select>
+                            />
                         </label><br />
 
                         <label className={styles.label}>E-mail: <br /> 
@@ -246,7 +288,7 @@ const Cadastro = () => {
                                     name="confirmarSenha" 
                                     placeholder="Confirme sua senha"
                                     value={confirmarSenha}
-                                    onChange={(e) => setConfirmarSenha(e.target.value)}
+                                    onChange={(e) => setConfirmarSenha(e.target.value)} 
                                     required  
                                     className={styles.inputField}
                                 />
@@ -258,176 +300,160 @@ const Cadastro = () => {
                                     {mostrarSenha2 ? '👁️' : '🙈'}
                                 </button>
                             </div>
-                        </label><br/>
-                    </fieldset>
-
-                    <fieldset className={styles.fieldset}>
-                        <legend className={styles.legenda}>Endereço</legend>
-
-                        <label className={styles.label}> CEP: <br />
-                            <InputMask
-                                mask="99999-999"
-                                type="text" 
-                                name="cep" 
-                                placeholder="Digite seu CEP" 
-                                value={cep}
-                                onChange={buscaCep} 
-                                required 
-                                className={styles.inputField}
-                            />
                         </label><br />
-
-                        <label className={styles.label}> Rua: <br />
-                            <input
-                                type="text" 
-                                name="rua" 
-                                placeholder="Digite sua Rua"
-                                value={rua}
-                                onChange={(e) => setRua(e.target.value)}
-                                className={styles.inputField} 
-                                readOnly
-                            />
-                        </label><br/>
-
-                        <label className={styles.label}> Número Residencial: <br />
-                            <input
-                                type="number"  
-                                name="numeroResidencial" 
-                                placeholder="Digite o Número Residencial"
-                                value={numeroResidencial}
-                                onChange={(e) => setNumeroResidencial(e.target.value)}
-                                className={styles.inputField}
-                                required 
-                            />
-                        <p className={styles.letrinhas}>Se caso não houver, digite 00 </p> <br />
-                        </label><br/>
-
-                        <label className={styles.label}> Complemento: <br />
-                            <input
-                                type="text" 
-                                name="complemento" 
-                                placeholder="Digite um Complemento"
-                                value={complemento}
-                                onChange={(e) => setComplemento(e.target.value)}
-                                className={styles.inputField} 
-                            />
-                        <p className={styles.letrinhas}>CAMPO NÃO OBRIGATÓRIO</p> <br />
-                        </label><br/>
-
-                        <label className={styles.label}> Bairro: <br />
-                            <input
-                                type="text" 
-                                name="bairro" 
-                                placeholder="Digite seu Bairro"
-                                value={bairro}
-                                onChange={(e) => setBairro(e.target.value)}
-                                className={styles.inputField} 
-                                readOnly
-                            />
-                        </label><br/>
-
-                        <label className={styles.label}> Cidade: <br />
-                            <input
-                                type="text" 
-                                name="cidade" 
-                                placeholder="Digite sua Cidade"
-                                value={cidade}
-                                onChange={(e) => setCidade(e.target.value)}
-                                className={styles.inputField} 
-                                readOnly
-                            />
-                        </label><br/>
-
-                        <label className={styles.label}> Estado: <br />
-                            <input
-                                type="text" 
-                                name="estado" 
-                                placeholder="Digite seu Estado"
-                                value={estado}
-                                onChange={(e) => setEstado(e.target.value)}
-                                className={styles.inputField} 
-                                readOnly
-                            />
-                        </label><br/>
                     </fieldset>
 
                     <fieldset className={styles.fieldset}>
                         <legend className={styles.legenda}>Documentos</legend>
 
-                        <label className={styles.label}>CPF: <br />
+                        <label className={styles.label}> CPF: <br /> 
                             <InputMask
                                 mask="999.999.999-99"
-                                type="text" 
-                                name="cpf" 
-                                placeholder="xxx.xxx.xxx-xx" 
+                                type="text"
+                                name="cpf"
+                                placeholder="Digite seu CPF"
                                 value={cpf}
-                                onChange={(e) => setCpf(e.target.value)} 
-                                onBlur={async () => {
-                                    const cpfSemFormatacao = cpf.replace(/\D/g, '');
-                                    const isValid = await validateCPF(cpfSemFormatacao);
-                                    if (!isValid) {
-                                        setCpf('');
-                                    }
-}}
+                                onChange={(e) => setCpf(e.target.value)}
                                 required  
                                 className={styles.inputField}
                             />
-                        </label><br/>
+                        </label><br />
 
-
-                        <label className={styles.label}>CNH: <br />
-                            <InputMask 
-                                mask="99999999999"
-                                type="text" 
-                                name="cnh" 
-                                placeholder="xxxxxxxxxxx" 
-                                value={cnh}
-                                onChange={(e) => setCnh(e.target.value)} 
-                                required 
-                                className={styles.inputField}
-                            />
-                        </label><br/>
-
-                        <label className={styles.label}>RG: <br />
+                        <label className={styles.label}> CNH: <br /> 
                             <InputMask
-                                mask="99.999.999-9" 
-                                type="text" 
-                                name="rg" 
-                                placeholder="xx.xxx.xxx-x" 
-                                value={rg}
-                                onChange={(e) => setRg(e.target.value)} 
+                                mask="99999999999"
+                                type="text"
+                                name="cnh"
+                                placeholder="Digite sua CNH"
+                                value={cnh}
+                                onChange={(e) => setCnh(e.target.value)}
                                 required  
                                 className={styles.inputField}
                             />
-                        </label><br/>
+                        </label><br />
+
+                        <label className={styles.label}> RG: <br /> 
+                            <InputMask
+                                mask="99.999.999-9"
+                                type="text"
+                                name="rg"
+                                placeholder="Digite seu RG"
+                                value={rg}
+                                onChange={(e) => setRg(e.target.value)}
+                                required  
+                                className={styles.inputField}
+                            />
+                        </label><br />
                     </fieldset>
 
-                    {carros.map((carro, index) => (
-                        <fieldset className={styles.fieldset} key={index}>
-                            <legend className={styles.legenda}>Dados dos Automóveis</legend>
-                            <CarroForm
+                    <fieldset className={styles.fieldset}>
+                        <legend className={styles.legenda}>Endereço</legend>
+
+                        <label className={styles.label}> CEP: <br /> 
+                            <InputMask
+                                mask="99999-999"
+                                type="text"
+                                name="cep"
+                                placeholder="Digite seu CEP"
+                                value={cep}
+                                onChange={buscaCep}
+                                required  
+                                className={styles.inputField}
+                            />
+                        </label><br />
+
+                        <label className={styles.label}> Rua: <br /> 
+                            <input 
+                                type="text" 
+                                name="rua" 
+                                placeholder="Digite sua Rua" 
+                                value={rua}
+                                onChange={(e) => setRua(e.target.value)} 
+                                required  
+                                className={styles.inputField}
+                            /> 
+                        </label><br />
+
+                        <label className={styles.label}> Número Residencial: <br /> 
+                            <input 
+                                type="text" 
+                                name="numero" 
+                                placeholder="Digite o Número"
+                                value={numeroResidencial}
+                                onChange={(e) => setNumeroResidencial(e.target.value)} 
+                                required  
+                                className={styles.inputField}
+                            />
+                        </label><br />
+
+                        <label className={styles.label}> Complemento: <br /> 
+                            <input 
+                                type="text" 
+                                name="complemento" 
+                                placeholder="Opcional" 
+                                value={complemento}
+                                onChange={(e) => setComplemento(e.target.value)} 
+                                className={styles.inputField}
+                            />
+                        </label><br />
+
+                        <label className={styles.label}> Bairro: <br /> 
+                            <input 
+                                type="text" 
+                                name="bairro" 
+                                placeholder="Digite seu Bairro" 
+                                value={bairro}
+                                onChange={(e) => setBairro(e.target.value)} 
+                                required  
+                                className={styles.inputField}
+                            />
+                        </label><br />
+
+                        <label className={styles.label}> Cidade: <br /> 
+                            <input 
+                                type="text" 
+                                name="cidade" 
+                                placeholder="Digite sua Cidade" 
+                                value={cidade}
+                                onChange={(e) => setCidade(e.target.value)} 
+                                required  
+                                className={styles.inputField}
+                            />
+                        </label><br />
+
+                        <label className={styles.label}> Estado: <br /> 
+                            <input 
+                                type="text" 
+                                name="estado" 
+                                placeholder="Digite seu Estado" 
+                                value={estado}
+                                onChange={(e) => setEstado(e.target.value)} 
+                                required  
+                                className={styles.inputField}
+                            />
+                        </label><br />
+                    </fieldset>
+
+                    <fieldset className={styles.fieldset}>
+                        <legend className={styles.legenda}>Dados do Automóvel</legend>
+                        {carros.map((carro, index) => (
+                            <CarroForm 
+                                key={index}
                                 index={index}
                                 carro={carro}
                                 handleInputChange={handleInputChange}
-                                removerCarro={removerCarro}
-                                carros={carros}
-                            />
-                        </fieldset>
-                    ))}
+                                removerCarro={removerCarro} carros={[]}                            />
+                        ))}
+                        <button 
+                            type="button" 
+                            onClick={adicionarCarro} 
+                            className={styles.botaoAdicionar}
+                        >
+                            Adicionar Carro
+                        </button>
+                    </fieldset>
 
-                    <button 
-                        type="button" 
-                        onClick={adicionarCarro}
-                        className={styles.botaoAdicionar}
-                    >
-                        Adicionar Carro
-                    </button>
-
-
-                    <button 
-                        type="submit" 
-                        className={styles.botao}
-                    > 
+                    <button type="submit" className={styles.botao}>
                         Cadastrar
                     </button>
                 </form>

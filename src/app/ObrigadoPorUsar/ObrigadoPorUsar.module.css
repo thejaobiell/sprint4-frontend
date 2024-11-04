@@ -1,30 +1,52 @@
 .thanks {
-    background-color: #B6B6B6;
-    height: 100vh;
-    margin: 0;
-    padding: 0;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
+    height: 100vh;
+    text-align: center;
+    padding: 20px;
 }
 
 .titulo {
-    margin-top: 20px;
+    font-size: 36px;
     margin-bottom: 20px;
 }
 
+.visitaInfo {
+    margin-top: 20px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    width: 100%;
+    max-width: 600px;
+}
+
+.guinchoInfo {
+    margin-top: 20px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    width: 100%;
+    max-width: 600px;
+}
+
 .botao {
-        height: 60px;
-        border-radius: 25px;
-        border: 3px solid #B6B6B6;
-        background: #009FE3;
-        color: #fff;
-        font-size: 20px;
-        font-weight: bold;
-        cursor: pointer;
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #0070f3;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    text-align: center;
+    transition: background-color 0.3s;
+    margin-top: 20px;
 }
 
 .botao:hover {
-    background: #0077B6;
+    background-color: #005bb5;
 }

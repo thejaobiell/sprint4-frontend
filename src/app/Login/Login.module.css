@@ -1,3 +1,23 @@
+.criar:link, .criar:visited {
+    color: #4A90E2;
+    text-decoration: none;
+}
+
+.criar:visited {
+    color: #4A90E2;
+    text-decoration: none;
+}
+
+.criar:hover {
+    color: #2E6EB5;
+    text-decoration: none;
+}
+
+.criar:active {
+    color: #003cff;
+    text-decoration: none;
+}
+
 .fieldset {
     border: 2px solid #ccc;
     border-radius: 5px;

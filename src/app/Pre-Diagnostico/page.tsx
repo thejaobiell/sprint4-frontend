@@ -2,7 +2,6 @@
 import { useEffect, useState } from 'react';
 import styles from './PreDiagnostico.module.css';
 import { useRouter } from 'next/navigation';
-import Link from 'next/link';
 
 interface Carro {
   placa: string;
@@ -53,9 +52,9 @@ const PreDiagnostico = () => {
 
   useEffect(() => {
     if (mostrarChat && mensagensChat.length === 0) {
-      const userInfo = JSON.parse(sessionStorage.getItem('user') || '{}');
+      const userInfo = JSON.parse(sessionStorage.getItem('cliente') || '{}'); // Usando 'cliente' para pegar o sessionStorage
       const carroSelecionadoStored = localStorage.getItem('carroSelecionado');
-      setMensagensChat([{ texto: `Olá ${userInfo.nome}, digite o problema do seu ${carroSelecionadoStored ? JSON.parse(carroSelecionadoStored).modelo : 'carro'}`, tipo: 'bot' }]);
+      setMensagensChat([{ texto: `Olá ${userInfo.nomeCliente} ${userInfo.sobrenomeCliente}, digite o problema do seu ${carroSelecionadoStored ? JSON.parse(carroSelecionadoStored).modelo : 'carro'}`, tipo: 'bot' }]);
     }
   }, [mostrarChat]);
 

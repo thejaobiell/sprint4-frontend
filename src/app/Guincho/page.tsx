@@ -1,4 +1,4 @@
-'use client'
+'use client';
 import React, { useEffect, useState } from 'react';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
@@ -51,22 +51,44 @@ const Guincho: React.FC = () => {
               const { road, suburb, city, state, postcode } = data.address;
 
               if (road) {
-                setEndereco(`${road || ''}, ${suburb || ''}, ${city || ''}, ${state || ''}, ${postcode || ''}`);
+                const enderecoCompleto = `${road}, ${suburb || ''}, ${city || ''}, ${state || ''}, ${postcode || ''}`;
+                setEndereco(enderecoCompleto);
+
+                sessionStorage.setItem('localizacao', JSON.stringify({
+                  rua: road,
+                  bairro: suburb || '',
+                  cidade: city || '',
+                  estado: state || '',
+                  cep: postcode || '',
+                  latitude: latitude,
+                  longitude: longitude
+                }));
               } else if (postcode) {
-                // Se não retornar o nome da rua, usar o CEP para buscar no ViaCEP
                 fetch(`https://viacep.com.br/ws/${postcode}/json/`)
                   .then(response => response.json())
                   .then(dataViaCEP => {
                     if (!dataViaCEP.erro) {
                       const { logradouro, bairro, localidade, uf } = dataViaCEP;
-                      setEndereco(`${logradouro || ''}, ${bairro || ''}, ${localidade || ''}, ${uf || ''}`);
+                      const enderecoCompleto = `${logradouro || ''}, ${bairro || ''}, ${localidade || ''}, ${uf || ''}, ${postcode}`;
+                      setEndereco(enderecoCompleto);
+
+                      sessionStorage.setItem('localizacao', JSON.stringify({
+                        rua: logradouro || '',
+                        bairro: bairro || '',
+                        cidade: localidade || '',
+                        estado: uf || '',
+                        cep: postcode,
+                        latitude: latitude,
+                        longitude: longitude
+                      }));
                     } else {
                       setErro('Endereço não encontrado.');
+                      setEndereco(`Localização: [${latitude}, ${longitude}] - Cidade: ${city || 'Desconhecida'}, Estado: ${state || 'Desconhecido'}`);
                     }
                   })
                   .catch(() => setErro('Erro ao obter endereço pelo ViaCEP.'));
               } else {
-                setErro('Erro ao obter endereço. Tente novamente.');
+                setEndereco(`Localização: [${latitude}, ${longitude}] - Cidade: ${city || 'Desconhecida'}, Estado: ${state || 'Desconhecido'}`);
               }
             })
             .catch(() => setErro('Erro ao obter endereço. Tente novamente.'));
@@ -93,7 +115,7 @@ const Guincho: React.FC = () => {
         <div>
           <MapContainer
             center={[localizacao.latitude, localizacao.longitude]}
-            zoom={13}
+            zoom={16}
             className={styles['leaflet-container']}
           >
             <TileLayer
@@ -105,7 +127,9 @@ const Guincho: React.FC = () => {
               icon={iconePadrao}
             >
               <Popup>
-                Você está aqui: [{localizacao.latitude}, {localizacao.longitude}]
+                Você está aqui:<br />
+                Latitude: {localizacao.latitude}<br />
+                Longitude: {localizacao.longitude}
               </Popup>
             </Marker>
           </MapContainer>

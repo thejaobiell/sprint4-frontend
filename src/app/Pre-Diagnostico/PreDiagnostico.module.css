@@ -133,6 +133,10 @@
         box-shadow: none;
     }
 
+    .inputContainer {
+        width: 740px;
+    }
+
     .botao {
         font-size: 14px;
         padding: 8px;
@@ -163,7 +167,7 @@
     }
     
     .inputContainer {
-        width: 370px;
+        width: 380px;
     }
 
     .informacoes,
@@ -203,7 +207,7 @@
     }
 
     .inputContainer {
-        width: 370px;
+        width: 400px;
     }
 
     .informacoes,
